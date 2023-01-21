@@ -1,0 +1,4 @@
+./backend/*.o
+./backend/sim.sh
+./backend/main.elf
+./backend/main.dump
