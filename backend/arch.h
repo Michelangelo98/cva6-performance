@@ -29,5 +29,6 @@ uint64_t arch_get_load();
 uint64_t arch_get_store();
 uint64_t arch_get_cacheline_in();
 uint64_t arch_get_cacheline_out();
+uint64_t arch_get_minstret();
 
 #endif

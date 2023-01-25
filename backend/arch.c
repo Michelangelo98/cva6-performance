@@ -25,6 +25,13 @@ uint64_t arch_get_counter()
   return  x;
 }
 
+uint64_t arch_get_minstret()
+{
+  uint64_t x;
+  asm volatile("csrr %0, minstret" : "=r" (x));
+  return  x;
+}
+
 uint64_t arch_get_miss()
 {
   uint64_t x;

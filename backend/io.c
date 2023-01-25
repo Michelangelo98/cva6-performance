@@ -26,6 +26,14 @@ void put_uint64(uint64_t i)
     while (n > 0) { n--; put_char(str[n]); }
 }
 
+void put_float(float i){
+  uint64_t decimal = (uint64_t)(((int)i*1000)%1000);
+  put_uint64(decimal);
+  put_char('.');
+  put_uint64((uint64_t)i);
+}
+
+
 void put_int64(int64_t i)
 {
   if (i < 0) {
