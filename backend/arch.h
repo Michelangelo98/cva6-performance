@@ -30,5 +30,9 @@ uint64_t arch_get_store();
 uint64_t arch_get_cacheline_in();
 uint64_t arch_get_cacheline_out();
 uint64_t arch_get_minstret();
+uint64_t arch_get_inv();
+uint64_t arch_get_wb_inv();
+uint64_t arch_get_miss_tot();
+uint64_t arch_get_amo();
 
 #endif

@@ -6,11 +6,16 @@ LD="/usr/pack/riscv-1.0-kgf/riscv64-gcc-8.5.0/bin/riscv64-unknown-elf-ld"
 OBJCOPY="/usr/pack/riscv-1.0-kgf/riscv64-gcc-8.5.0/bin/riscv64-unknown-elf-objcopy"
 OBJDUMP="/usr/pack/riscv-1.0-kgf/riscv64-gcc-8.5.0/bin/riscv64-unknown-elf-objdump"
 
+TEST="rand_rw"
+MACRO_TEST="RAND_RW"
+
 OPT="-O -fno-builtin"          #optimize even more and avoid to use standard c functions
-CFLAGS="$OPT -I. -mcmodel=medany -g"  #include actuar directory to search directories
+CFLAGS="$OPT -D$MACRO_TEST -I. -mcmodel=medany -g"  #include actuar directory to search directories
 LDFLAGS="-G 0 -T $PLATFORM.ld"
 
-CFILES="main io log rand arch platform uart test"
+
+CFILES="main io log rand arch platform uart test $TEST"
+
 OFILES=""
 for F in $CFILES
 do

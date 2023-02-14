@@ -3,149 +3,112 @@
 #include "arch.h"
 #include "rand.h"
 
+
+
+#if defined COUNTER
+    #include "counter.h"
+#elif defined RAND_RW
+    #include "rand_rw.h"
+#else
+    #include "shared_queue.h"
+#endif
+
+
 // ================
 // Global variables
 // ================
 
-test_t test;
+monitors_t monitors;
 
 // =========
 // Functions
 // =========
 
-void test_init(int num_shared_var,int num_private_var)
+int test_check_coherence()
 {
   //put_string("test_init started\r\n");
 
-  test.lock = 0;
-  for (int i = 0; i < num_shared_var; i++)
-  {
-    test.outcome[i] = 0;
-  }
-  /*for (int i = 0; i < NUM_PROCESSES; i++)
-  {*/
-    for (int j = 0; j < num_private_var; j++)
-    {
-      test.private_vect[j]=0;
-    }
-  /*}*/
+  #if defined COUNTER
+    return counter_check();
+  #elif defined RAND_RW
+    return rand_rw_check();
+  #else
+    return shared_queue_check();
+  #endif
 
 }
 
-
-inline void delay(int n)
+void test_init()
 {
-  for (int i = 0; i < n; i++)
-    asm volatile ("nop\n");
+  //put_string("test_init started\r\n");
+  #if defined COUNTER
+    counter_init();
+  #elif defined RAND_RW
+    rand_rw_init();
+  #else
+    shared_queue_init();
+  #endif
+
 }
 
 
-void test_op(int pid,int num_shared_var,int num_private_var,int private_in_shared,int private_first_write)
+void test_print()
 {
-  
-    /* pre-code */
-    // operations on private vars (read -> write)
-    for (int i = 0; i < num_private_var; i++)
-    {
-      for (int j = 0; j < 10; j++)
-      {
-        test.private_vect[i]++;
-      }      
-            
-    }
-    
-    acquire(&test.lock);
+  //put_string("test_init started\r\n");
+  #if defined COUNTER
+    counter_print();
+  #elif defined RAND_RW
+    rand_rw_print();
+  #else
+    shared_queue_print();
+  #endif
 
-    /* Critical section */
-    // operations on private vars - no need to be invalidated
-    /*for (int i = 0; i < private_in_shared; i++)
-    {      
-      test.private_vect[i]++;      
-    }*/
-    // operations on shared vars - they must be taken from main memory
-    for (int i = 0; i < num_shared_var; i++)
-    {          
-
-      for (int j = 0; j < 10; j++)
-      {
-        test.outcome[i]++;
-      }
-
-    }
-    release(&test.lock);
-
-    /* post-code */
-
-    // operations on private vars (write), never evicted from the cache
-    // for sync operations
-    /*for (int i = 0; i < private_first_write; i++)
-    {
-      test.private_vect[i] = i;
-    }*/
-
-    // operations on private vars (read -> write)
-    for (int i = 0; i < num_private_var; i++)
-    {
-      for (int j = 0; j < 10; j++)
-      {
-        test.private_vect[i]++;
-      }
-    }
-
-    
-      
 }
 
-void test_body(int pid,int num_shared_var,int num_private_var,int private_in_shared,int private_first_write) {
+
+void test_body(int pid) {
 
   //sync start of test
   arch_barrier_up();
-  //save stat
-  test.start_miss[pid] = arch_get_miss();
-  test.start_load[pid] = arch_get_load();
-  test.start_store[pid] = arch_get_store();
-  test.start_cacheline_in[pid]  = arch_get_cacheline_in();
-  test.start_cacheline_out[pid] = arch_get_cacheline_out();
-  test.start_minstret[pid] = arch_get_minstret();
+/*  //save stat
+  monitors.start_miss[pid] = arch_get_miss();
+  monitors.start_load[pid] = arch_get_load();
+  monitors.start_store[pid] = arch_get_store();
+  monitors.start_cacheline_in[pid]  = arch_get_cacheline_in();
+  monitors.start_cacheline_out[pid] = arch_get_cacheline_out();
+  monitors.start_inv[pid] = arch_get_inv();
+  monitors.start_wb_inv[pid] = arch_get_wb_inv();
+  monitors.start_miss_tot[pid] = arch_get_miss_tot();
+  monitors.start_amo[pid] = arch_get_amo();
+  monitors.start_minstret[pid] = arch_get_minstret();
+  //start performance counter
+  monitors.start_time[pid] = arch_get_counter();*/
 
-  switch(pid) {
-    case 0: {
-
-      //start performance counter
-      test.start_time[pid] = arch_get_counter();
-
-
-      test_op(pid,num_shared_var,num_private_var, private_in_shared, private_first_write);
-
-      test.end_minstret[pid] = arch_get_minstret();
-      test.end_miss[pid] = arch_get_miss();
-      test.end_load[pid] = arch_get_load();
-      test.end_store[pid] = arch_get_store();
-      test.end_cacheline_in[pid]  = arch_get_cacheline_in();
-      test.end_cacheline_out[pid] = arch_get_cacheline_out();
+#if defined COUNTER
+  counter_op(pid);
+#elif defined RAND_RW
+  rand_rw_op(pid);
+#else
+  shared_queue_op(pid);
+#endif
 
 
-      //sync end of test
-      arch_barrier_down();
-      test.end_time = arch_get_counter();
-      break;
-    }
-    case 1: {
-      test.start_time[pid] = arch_get_counter();
-      
-      test_op(pid,num_shared_var,num_private_var, private_in_shared, private_first_write);
 
-      test.end_minstret[pid] = arch_get_minstret();
-      test.end_miss[pid] = arch_get_miss();
-      test.end_load[pid] = arch_get_load();
-      test.end_store[pid] = arch_get_store();
-      test.end_cacheline_in[pid]  = arch_get_cacheline_in();
-      test.end_cacheline_out[pid] = arch_get_cacheline_out();
-      //sync end of test
-      arch_barrier_down();
-      break;
-    }
-  }
+
+  //sync end of test
+  arch_barrier_down();
+
+  /*monitors.end_miss[pid] = arch_get_miss();
+  monitors.end_load[pid] = arch_get_load();
+  monitors.end_store[pid] = arch_get_store();
+  monitors.end_cacheline_in[pid]  = arch_get_cacheline_in();
+  monitors.end_cacheline_out[pid] = arch_get_cacheline_out();
+  monitors.end_inv[pid] = arch_get_inv();
+  monitors.end_wb_inv[pid] = arch_get_wb_inv();
+  monitors.end_miss_tot[pid] = arch_get_miss_tot();
+  monitors.end_amo[pid] = arch_get_amo();
+  monitors.end_minstret[pid] = arch_get_minstret();
+  monitors.end_time = arch_get_counter(); */   
 
   
 }

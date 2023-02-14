@@ -3,8 +3,6 @@
 #include "io.h"
 #include "test.h"
 
-extern test_t test;
-
 // Code specific to RISCV64
 
 // Hardware thread id =========================================================
@@ -64,6 +62,34 @@ uint64_t arch_get_cacheline_out()
 {
   uint64_t x;
   asm volatile("csrr %0, 0xB12" : "=r" (x));
+  return  x;
+}
+
+uint64_t arch_get_inv()
+{
+  uint64_t x;
+  asm volatile("csrr %0, 0xB13" : "=r" (x));
+  return  x;
+}
+
+uint64_t arch_get_wb_inv()
+{
+  uint64_t x;
+  asm volatile("csrr %0, 0xB14" : "=r" (x));
+  return  x;
+}
+
+uint64_t arch_get_miss_tot()
+{
+  uint64_t x;
+  asm volatile("csrr %0, 0xB15" : "=r" (x));
+  return  x;
+}
+
+uint64_t arch_get_amo()
+{
+  uint64_t x;
+  asm volatile("csrr %0, 0xB16" : "=r" (x));
   return  x;
 }
 
@@ -132,8 +158,8 @@ void release(volatile uint32_t * lock)
 {
   asm volatile (
 
-      "amoswap.w.rl x0, x0, (%0)"
-      
+      "nop                      \n"
+      "amoswap.w.rl x0, x0, (%0)\n"
   : /* output operands */
   : /* input operands */
     "r"(lock));
