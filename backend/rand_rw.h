@@ -9,8 +9,8 @@
 // ==========
 
 #define NUM_ITERATIONS 10
-#define MAX_PRIV 100
-#define MAX_SHARE 100
+#define MAX_PRIV 1000
+#define MAX_SHARE MAX_PRIV/10
 
 
 typedef struct {

@@ -17,6 +17,7 @@
 
 void arch_barrier_up();
 void arch_barrier_down();
+void arch_generic_barrier();
 
 void acquire(volatile uint32_t * lock);
 void release(volatile uint32_t * lock);

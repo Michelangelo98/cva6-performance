@@ -1,7 +1,7 @@
 #ifndef _SHARED_QUEUE_
 #define _SHARED_QUEUE_
 
-#define MAX_NODES 1000
+#define MAX_NODES 100
 
 
 // Queue structure

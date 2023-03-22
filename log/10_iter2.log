@@ -1,0 +1,68 @@
+
+
+HART 0 : -----------------------------
+# spin = 13
+Acquire time = 9266
+Avg acquire time = 712
+Release time = 6200
+CS time = 3366
+No-CS time = 9679
+Tot time = 28511
+HART 1 : -----------------------------
+# spin = 13
+Acquire time = 9042
+Avg acquire time = 695
+Release time = 6476
+CS time = 3386
+No-CS time = 8847
+Tot time = 27751
+Overall -------------------------------
+Tot time = 29027
+Best time = (13045 16431)
+Difference = (15982=122.514373323% 12596=76.6599720041%
+
+
+
+HART 0 : -----------------------------
+# spin = 15
+Acquire time = 23907
+Avg acquire time = 1593
+Release time = 8981
+CS time = 19976
+No-CS time = 76885
+Tot time = 129749
+HART 1 : -----------------------------
+# spin = 19
+Acquire time = 25367
+Avg acquire time = 1335
+Release time = 8863
+CS time = 20118
+No-CS time = 97976
+Tot time = 152324
+Overall -------------------------------
+Tot time = 152324
+Best time = (118094 138070)
+Difference = (34230=28.9853845242% 14254=10.3237488231%
+
+
+
+HART 0 : -----------------------------
+# spin = 48
+Acquire time = 184061
+Avg acquire time = 3834
+Release time = 36572
+CS time = 174659
+No-CS time = 906753
+Tot time = 1302045
+HART 1 : -----------------------------
+# spin = 22
+Acquire time = 156330
+Avg acquire time = 7105
+Release time = 37635
+CS time = 168671
+No-CS time = 851452
+Tot time = 1214088
+Overall -------------------------------
+Tot time = 1302561
+Best time = (1081412 1250083)
+Difference = (221149=20.450022748% 52478=4.19796125537%

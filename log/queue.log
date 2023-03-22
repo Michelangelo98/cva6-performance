@@ -1,0 +1,46 @@
+HART 0 : -----------------------------
+Acquire time = 1804
+Release time = 1804
+Tot time = 3259
+HART 1 : -----------------------------
+Acquire time = 1483
+Release time = 1483
+Tot time = 2996
+
+Tot time = 3384
+
+
+HART 0 : -----------------------------
+Acquire time = 12034
+Release time = 12034
+Tot time = 17992
+HART 1 : -----------------------------
+Acquire time = 13947
+Release time = 13947
+Tot time = 17709
+
+Tot time = 18116
+
+
+HART 0 : -----------------------------
+Acquire time = 116394
+Release time = 116394
+Tot time = 165379
+HART 1 : -----------------------------
+Acquire time = 138744
+Release time = 138744
+Tot time = 165186
+
+Tot time = 165499
+
+HART 0 : -----------------------------
+Acquire time = 1142613
+Release time = 1142613
+Tot time = 1642885
+HART 1 : -----------------------------
+Acquire time = 1377314
+Release time = 1377314
+Tot time = 1642967
+
+Tot time = 1643005
+

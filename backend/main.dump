@@ -25,7 +25,7 @@ int main()
     80000022:	e406                	sd	ra,8(sp)
   // Get my global process id
   int me = arch_get_process_id();
-    80000024:	2dc000ef          	jal	ra,80000300 <arch_get_process_id>
+    80000024:	2d8000ef          	jal	ra,800002fc <arch_get_process_id>
     80000028:	2501                	sext.w	a0,a0
 
 /*  // Random seed
@@ -45,7 +45,7 @@ int main()
   }
 
   test_body(me);
-    80000034:	552000ef          	jal	ra,80000586 <test_body>
+    80000034:	556000ef          	jal	ra,8000058a <test_body>
     //log_display();
     put_string("Time\n");
   }
@@ -61,15 +61,15 @@ int main()
     80000044:	80058593          	addi	a1,a1,-2048 # 70800 <HARTID+0x6f8ec>
     80000048:	02faf537          	lui	a0,0x2faf
     8000004c:	08050513          	addi	a0,a0,128 # 2faf080 <HARTID+0x2fae16c>
-    80000050:	3be000ef          	jal	ra,8000040e <init_uart>
+    80000050:	3c2000ef          	jal	ra,80000412 <init_uart>
     test_init();
-    80000054:	516000ef          	jal	ra,8000056a <test_init>
+    80000054:	51a000ef          	jal	ra,8000056e <test_init>
   test_body(me);
     80000058:	4501                	li	a0,0
-    8000005a:	52c000ef          	jal	ra,80000586 <test_body>
+    8000005a:	530000ef          	jal	ra,8000058a <test_body>
     put_string("Time\n");
-    8000005e:	00001517          	auipc	a0,0x1
-    80000062:	da250513          	addi	a0,a0,-606 # 80000e00 <.got.plt+0x10>
+    8000005e:	00003517          	auipc	a0,0x3
+    80000062:	7d250513          	addi	a0,a0,2002 # 80003830 <.got.plt+0x10>
     80000066:	006000ef          	jal	ra,8000006c <put_string>
     8000006a:	b7f9                	j	80000038 <main+0x18>
 
@@ -87,7 +87,7 @@ void put_string(char* s)
   while (*s) { put_char(*s); s++; }
     80000074:	00054503          	lbu	a0,0(a0)
     80000078:	c519                	beqz	a0,80000086 <put_string+0x1a>
-    8000007a:	348000ef          	jal	ra,800003c2 <put_char>
+    8000007a:	34c000ef          	jal	ra,800003c6 <put_char>
     8000007e:	0405                	addi	s0,s0,1
     80000080:	00044503          	lbu	a0,0(s0)
     80000084:	f97d                	bnez	a0,8000007a <put_string+0xe>
@@ -143,7 +143,7 @@ void put_uint64(uint64_t i)
     800000dc:	9081                	srli	s1,s1,0x20
     800000de:	409784b3          	sub	s1,a5,s1
     800000e2:	fff44503          	lbu	a0,-1(s0)
-    800000e6:	2dc000ef          	jal	ra,800003c2 <put_char>
+    800000e6:	2e0000ef          	jal	ra,800003c6 <put_char>
     800000ea:	147d                	addi	s0,s0,-1
     800000ec:	fe941be3          	bne	s0,s1,800000e2 <put_uint64+0x54>
 }
@@ -154,7 +154,7 @@ void put_uint64(uint64_t i)
     800000f8:	8082                	ret
     put_char('0');
     800000fa:	03000513          	li	a0,48
-    800000fe:	2c4000ef          	jal	ra,800003c2 <put_char>
+    800000fe:	2c8000ef          	jal	ra,800003c6 <put_char>
     80000102:	b7fd                	j	800000f0 <put_uint64+0x62>
 
 0000000080000104 <put_uint32>:
@@ -183,7 +183,7 @@ void put_float(float i){
     80000122:	f6dff0ef          	jal	ra,8000008e <put_uint64>
   put_char('.');
     80000126:	02e00513          	li	a0,46
-    8000012a:	298000ef          	jal	ra,800003c2 <put_char>
+    8000012a:	29c000ef          	jal	ra,800003c6 <put_char>
   put_uint64((uint64_t)i);
     8000012e:	c0341553          	fcvt.lu.s	a0,fs0,rtz
     80000132:	f5dff0ef          	jal	ra,8000008e <put_uint64>
@@ -217,7 +217,7 @@ void put_int64(int64_t i)
     80000156:	8082                	ret
     put_char('-');
     80000158:	02d00513          	li	a0,45
-    8000015c:	266000ef          	jal	ra,800003c2 <put_char>
+    8000015c:	26a000ef          	jal	ra,800003c6 <put_char>
     i = -i;
     80000160:	40800433          	neg	s0,s0
     80000164:	b7dd                	j	8000014a <put_int64+0xc>
@@ -229,8 +229,8 @@ void halt()
     80000166:	1141                	addi	sp,sp,-16
     80000168:	e406                	sd	ra,8(sp)
   put_string("Halted\n");
-    8000016a:	00001517          	auipc	a0,0x1
-    8000016e:	c9e50513          	addi	a0,a0,-866 # 80000e08 <.got.plt+0x18>
+    8000016a:	00003517          	auipc	a0,0x3
+    8000016e:	6ce50513          	addi	a0,a0,1742 # 80003838 <.got.plt+0x18>
     80000172:	efbff0ef          	jal	ra,8000006c <put_string>
   while(1);
     80000176:	a001                	j	80000176 <halt+0x10>
@@ -248,36 +248,36 @@ void log_print_performance()
 
 
   put_string("Benchmark info: ");
-    8000017e:	00001517          	auipc	a0,0x1
-    80000182:	c9250513          	addi	a0,a0,-878 # 80000e10 <.got.plt+0x20>
+    8000017e:	00003517          	auipc	a0,0x3
+    80000182:	6c250513          	addi	a0,a0,1730 # 80003840 <.got.plt+0x20>
     80000186:	ee7ff0ef          	jal	ra,8000006c <put_string>
   test_print();
-    8000018a:	3ee000ef          	jal	ra,80000578 <test_print>
+    8000018a:	3f2000ef          	jal	ra,8000057c <test_print>
   put_string("\n");
-    8000018e:	00001517          	auipc	a0,0x1
-    80000192:	c9a50513          	addi	a0,a0,-870 # 80000e28 <.got.plt+0x38>
+    8000018e:	00003517          	auipc	a0,0x3
+    80000192:	6ca50513          	addi	a0,a0,1738 # 80003858 <.got.plt+0x38>
     80000196:	ed7ff0ef          	jal	ra,8000006c <put_string>
 
 
   put_string("Cycles: ");
-    8000019a:	00001517          	auipc	a0,0x1
-    8000019e:	c9650513          	addi	a0,a0,-874 # 80000e30 <.got.plt+0x40>
+    8000019a:	00003517          	auipc	a0,0x3
+    8000019e:	6c650513          	addi	a0,a0,1734 # 80003860 <.got.plt+0x40>
     800001a2:	ecbff0ef          	jal	ra,8000006c <put_string>
   put_uint64(monitors.end_time - monitors.start_time[0]);
-    800001a6:	00001417          	auipc	s0,0x1
-    800001aa:	c4243403          	ld	s0,-958(s0) # 80000de8 <_GLOBAL_OFFSET_TABLE_+0x8>
+    800001a6:	00003417          	auipc	s0,0x3
+    800001aa:	67243403          	ld	s0,1650(s0) # 80003818 <_GLOBAL_OFFSET_TABLE_+0x8>
     800001ae:	6808                	ld	a0,16(s0)
     800001b0:	601c                	ld	a5,0(s0)
     800001b2:	8d1d                	sub	a0,a0,a5
     800001b4:	edbff0ef          	jal	ra,8000008e <put_uint64>
   put_string("\n");
-    800001b8:	00001517          	auipc	a0,0x1
-    800001bc:	c7050513          	addi	a0,a0,-912 # 80000e28 <.got.plt+0x38>
+    800001b8:	00003517          	auipc	a0,0x3
+    800001bc:	6a050513          	addi	a0,a0,1696 # 80003858 <.got.plt+0x38>
     800001c0:	eadff0ef          	jal	ra,8000006c <put_string>
 
   put_string("Retired instructions: ");
-    800001c4:	00001517          	auipc	a0,0x1
-    800001c8:	c7c50513          	addi	a0,a0,-900 # 80000e40 <.got.plt+0x50>
+    800001c4:	00003517          	auipc	a0,0x3
+    800001c8:	6ac50513          	addi	a0,a0,1708 # 80003870 <.got.plt+0x50>
     800001cc:	ea1ff0ef          	jal	ra,8000006c <put_string>
   put_uint64(monitors.end_minstret[0]-monitors.start_minstret[0]);
     800001d0:	7408                	ld	a0,40(s0)
@@ -285,13 +285,13 @@ void log_print_performance()
     800001d4:	8d1d                	sub	a0,a0,a5
     800001d6:	eb9ff0ef          	jal	ra,8000008e <put_uint64>
   put_string("\n");
-    800001da:	00001517          	auipc	a0,0x1
-    800001de:	c4e50513          	addi	a0,a0,-946 # 80000e28 <.got.plt+0x38>
+    800001da:	00003517          	auipc	a0,0x3
+    800001de:	67e50513          	addi	a0,a0,1662 # 80003858 <.got.plt+0x38>
     800001e2:	e8bff0ef          	jal	ra,8000006c <put_string>
 
   put_string("Inv time: ");
-    800001e6:	00001517          	auipc	a0,0x1
-    800001ea:	c7250513          	addi	a0,a0,-910 # 80000e58 <.got.plt+0x68>
+    800001e6:	00003517          	auipc	a0,0x3
+    800001ea:	6a250513          	addi	a0,a0,1698 # 80003888 <.got.plt+0x68>
     800001ee:	e7fff0ef          	jal	ra,8000006c <put_string>
   put_uint64(monitors.end_inv[0] - monitors.start_inv[0]);
     800001f2:	6c68                	ld	a0,216(s0)
@@ -299,13 +299,13 @@ void log_print_performance()
     800001f8:	8d1d                	sub	a0,a0,a5
     800001fa:	e95ff0ef          	jal	ra,8000008e <put_uint64>
   put_string("\n");
-    800001fe:	00001517          	auipc	a0,0x1
-    80000202:	c2a50513          	addi	a0,a0,-982 # 80000e28 <.got.plt+0x38>
+    800001fe:	00003517          	auipc	a0,0x3
+    80000202:	65a50513          	addi	a0,a0,1626 # 80003858 <.got.plt+0x38>
     80000206:	e67ff0ef          	jal	ra,8000006c <put_string>
 
   put_string("WB inv time: ");
-    8000020a:	00001517          	auipc	a0,0x1
-    8000020e:	c5e50513          	addi	a0,a0,-930 # 80000e68 <.got.plt+0x78>
+    8000020a:	00003517          	auipc	a0,0x3
+    8000020e:	68e50513          	addi	a0,a0,1678 # 80003898 <.got.plt+0x78>
     80000212:	e5bff0ef          	jal	ra,8000006c <put_string>
   put_uint64(monitors.end_wb_inv[0] - monitors.start_wb_inv[0]);
     80000216:	7468                	ld	a0,232(s0)
@@ -313,13 +313,13 @@ void log_print_performance()
     8000021c:	8d1d                	sub	a0,a0,a5
     8000021e:	e71ff0ef          	jal	ra,8000008e <put_uint64>
   put_string("\n");
-    80000222:	00001517          	auipc	a0,0x1
-    80000226:	c0650513          	addi	a0,a0,-1018 # 80000e28 <.got.plt+0x38>
+    80000222:	00003517          	auipc	a0,0x3
+    80000226:	63650513          	addi	a0,a0,1590 # 80003858 <.got.plt+0x38>
     8000022a:	e43ff0ef          	jal	ra,8000006c <put_string>
 
   put_string("Miss time: ");
-    8000022e:	00001517          	auipc	a0,0x1
-    80000232:	c4a50513          	addi	a0,a0,-950 # 80000e78 <.got.plt+0x88>
+    8000022e:	00003517          	auipc	a0,0x3
+    80000232:	67a50513          	addi	a0,a0,1658 # 800038a8 <.got.plt+0x88>
     80000236:	e37ff0ef          	jal	ra,8000006c <put_string>
   put_uint64(monitors.end_miss_tot[0] - monitors.start_miss_tot[0]);
     8000023a:	7c68                	ld	a0,248(s0)
@@ -327,13 +327,13 @@ void log_print_performance()
     80000240:	8d1d                	sub	a0,a0,a5
     80000242:	e4dff0ef          	jal	ra,8000008e <put_uint64>
   put_string("\n");
-    80000246:	00001517          	auipc	a0,0x1
-    8000024a:	be250513          	addi	a0,a0,-1054 # 80000e28 <.got.plt+0x38>
+    80000246:	00003517          	auipc	a0,0x3
+    8000024a:	61250513          	addi	a0,a0,1554 # 80003858 <.got.plt+0x38>
     8000024e:	e1fff0ef          	jal	ra,8000006c <put_string>
 
   put_string("Amo time: ");
-    80000252:	00001517          	auipc	a0,0x1
-    80000256:	c3650513          	addi	a0,a0,-970 # 80000e88 <.got.plt+0x98>
+    80000252:	00003517          	auipc	a0,0x3
+    80000256:	66650513          	addi	a0,a0,1638 # 800038b8 <.got.plt+0x98>
     8000025a:	e13ff0ef          	jal	ra,8000006c <put_string>
   put_uint64(monitors.end_amo[0] - monitors.start_amo[0]);
     8000025e:	10843503          	ld	a0,264(s0)
@@ -341,8 +341,8 @@ void log_print_performance()
     80000266:	8d1d                	sub	a0,a0,a5
     80000268:	e27ff0ef          	jal	ra,8000008e <put_uint64>
   put_string("\n");
-    8000026c:	00001517          	auipc	a0,0x1
-    80000270:	bbc50513          	addi	a0,a0,-1092 # 80000e28 <.got.plt+0x38>
+    8000026c:	00003517          	auipc	a0,0x3
+    80000270:	5ec50513          	addi	a0,a0,1516 # 80003858 <.got.plt+0x38>
     80000274:	df9ff0ef          	jal	ra,8000006c <put_string>
   put_uint64(monitors.end_cacheline_out[1] - monitors.start_cacheline_out[1]);
   put_string("\n");*/
@@ -363,982 +363,994 @@ void log_display()
     80000282:	e406                	sd	ra,8(sp)
   //put_string("log_display started\r\n");
   if(test_check_coherence() == 0){
-    80000284:	2d8000ef          	jal	ra,8000055c <test_check_coherence>
-    80000288:	e511                	bnez	a0,80000294 <log_display+0x14>
-    log_print_performance();
-    8000028a:	eefff0ef          	jal	ra,80000178 <log_print_performance>
+    80000284:	2dc000ef          	jal	ra,80000560 <test_check_coherence>
+    80000288:	e501                	bnez	a0,80000290 <log_display+0x10>
+    //log_print_performance();
   }else{
     put_string("ERROR: coherence not ensured\r\n");
   }
   
 }
-    8000028e:	60a2                	ld	ra,8(sp)
-    80000290:	0141                	addi	sp,sp,16
-    80000292:	8082                	ret
+    8000028a:	60a2                	ld	ra,8(sp)
+    8000028c:	0141                	addi	sp,sp,16
+    8000028e:	8082                	ret
     put_string("ERROR: coherence not ensured\r\n");
-    80000294:	00001517          	auipc	a0,0x1
-    80000298:	c0450513          	addi	a0,a0,-1020 # 80000e98 <.got.plt+0xa8>
-    8000029c:	dd1ff0ef          	jal	ra,8000006c <put_string>
+    80000290:	00003517          	auipc	a0,0x3
+    80000294:	63850513          	addi	a0,a0,1592 # 800038c8 <.got.plt+0xa8>
+    80000298:	dd5ff0ef          	jal	ra,8000006c <put_string>
 }
-    800002a0:	b7fd                	j	8000028e <log_display+0xe>
+    8000029c:	b7fd                	j	8000028a <log_display+0xa>
 
-00000000800002a2 <rand_bit>:
+000000008000029e <rand_bit>:
 
 static const uint32_t a = 69069;
 static const uint32_t c = 25173;
 
 inline static uint32_t unlocked_rand(uint32_t *st)  {
   uint32_t r = a * *st + c ;
-    800002a2:	411c                	lw	a5,0(a0)
-    800002a4:	6745                	lui	a4,0x11
-    800002a6:	dcd7071b          	addiw	a4,a4,-563 # 10dcd <HARTID+0xfeb9>
-    800002aa:	02e787bb          	mulw	a5,a5,a4
-    800002ae:	6719                	lui	a4,0x6
-    800002b0:	2557071b          	addiw	a4,a4,597 # 6255 <HARTID+0x5341>
-    800002b4:	9fb9                	addw	a5,a5,a4
+    8000029e:	411c                	lw	a5,0(a0)
+    800002a0:	6745                	lui	a4,0x11
+    800002a2:	dcd7071b          	addiw	a4,a4,-563 # 10dcd <HARTID+0xfeb9>
+    800002a6:	02e787bb          	mulw	a5,a5,a4
+    800002aa:	6719                	lui	a4,0x6
+    800002ac:	2557071b          	addiw	a4,a4,597 # 6255 <HARTID+0x5341>
+    800002b0:	9fb9                	addw	a5,a5,a4
   *st = r ;
-    800002b6:	c11c                	sw	a5,0(a0)
+    800002b2:	c11c                	sw	a5,0(a0)
   /* Swap high & low bits */
   uint32_t low = r & 0xffff ;
   uint32_t high = r >> 16 ;
   r = high | (low << 16) ;
-    800002b8:	0107d51b          	srliw	a0,a5,0x10
+    800002b4:	0107d51b          	srliw	a0,a5,0x10
 
 int rand_bit(uint32_t *st)  {
   uint32_t r = unlocked_rand(st) ;
   r &= 1 ;
   return r ; 
 }
-    800002bc:	8905                	andi	a0,a0,1
-    800002be:	8082                	ret
+    800002b8:	8905                	andi	a0,a0,1
+    800002ba:	8082                	ret
 
-00000000800002c0 <rand_k>:
+00000000800002bc <rand_k>:
 
 uint32_t rand_k(uint32_t *st, uint32_t k) {
-    800002c0:	832a                	mv	t1,a0
-    800002c2:	4118                	lw	a4,0(a0)
+    800002bc:	832a                	mv	t1,a0
+    800002be:	4118                	lw	a4,0(a0)
   uint32_t r = a * *st + c ;
-    800002c4:	68c5                	lui	a7,0x11
-    800002c6:	dcd8889b          	addiw	a7,a7,-563 # 10dcd <HARTID+0xfeb9>
-    800002ca:	6819                	lui	a6,0x6
-    800002cc:	2558081b          	addiw	a6,a6,597 # 6255 <HARTID+0x5341>
+    800002c0:	68c5                	lui	a7,0x11
+    800002c2:	dcd8889b          	addiw	a7,a7,-563 # 10dcd <HARTID+0xfeb9>
+    800002c6:	6819                	lui	a6,0x6
+    800002c8:	2558081b          	addiw	a6,a6,597 # 6255 <HARTID+0x5341>
   uint32_t r, v ;
   do {
     r = unlocked_rand(st) ;
     v = r % k ;
   } while (r-v > 0xffffffff-k+1) ;
-    800002d0:	40b0063b          	negw	a2,a1
-    800002d4:	2601                	sext.w	a2,a2
+    800002cc:	40b0063b          	negw	a2,a1
+    800002d0:	2601                	sext.w	a2,a2
   uint32_t r = a * *st + c ;
-    800002d6:	0317073b          	mulw	a4,a4,a7
-    800002da:	0107073b          	addw	a4,a4,a6
+    800002d2:	0317073b          	mulw	a4,a4,a7
+    800002d6:	0107073b          	addw	a4,a4,a6
   r = high | (low << 16) ;
-    800002de:	0107179b          	slliw	a5,a4,0x10
-    800002e2:	0107569b          	srliw	a3,a4,0x10
-    800002e6:	8fd5                	or	a5,a5,a3
-    800002e8:	2781                	sext.w	a5,a5
+    800002da:	0107179b          	slliw	a5,a4,0x10
+    800002de:	0107569b          	srliw	a3,a4,0x10
+    800002e2:	8fd5                	or	a5,a5,a3
+    800002e4:	2781                	sext.w	a5,a5
     v = r % k ;
-    800002ea:	02b7f6bb          	remuw	a3,a5,a1
-    800002ee:	0006851b          	sext.w	a0,a3
+    800002e6:	02b7f6bb          	remuw	a3,a5,a1
+    800002ea:	0006851b          	sext.w	a0,a3
   *st = r ;
-    800002f2:	2701                	sext.w	a4,a4
+    800002ee:	2701                	sext.w	a4,a4
   } while (r-v > 0xffffffff-k+1) ;
-    800002f4:	9f95                	subw	a5,a5,a3
-    800002f6:	fef660e3          	bltu	a2,a5,800002d6 <rand_k+0x16>
-    800002fa:	00e32023          	sw	a4,0(t1)
+    800002f0:	9f95                	subw	a5,a5,a3
+    800002f2:	fef660e3          	bltu	a2,a5,800002d2 <rand_k+0x16>
+    800002f6:	00e32023          	sw	a4,0(t1)
   return v ;
 }
-    800002fe:	8082                	ret
+    800002fa:	8082                	ret
 
-0000000080000300 <arch_get_process_id>:
+00000000800002fc <arch_get_process_id>:
 // Hardware thread id =========================================================
 
 uint64_t arch_get_process_id()
 {
   uint64_t x;
   asm volatile("csrr %0, 0xf14" : "=r" (x));  //CSRRS rd, csr, x0
-    80000300:	f1402573          	csrr	a0,mhartid
+    800002fc:	f1402573          	csrr	a0,mhartid
   return  x;
 }
-    80000304:	8082                	ret
+    80000300:	8082                	ret
 
-0000000080000306 <arch_get_counter>:
+0000000080000302 <arch_get_counter>:
 // Hardware counter ===========================================================
 
 uint64_t arch_get_counter()
 {
   uint64_t x;
   asm volatile("csrr %0, mcycle" : "=r" (x));
-    80000306:	b0002573          	csrr	a0,mcycle
+    80000302:	b0002573          	csrr	a0,mcycle
   return  x;
 }
-    8000030a:	8082                	ret
+    80000306:	8082                	ret
 
-000000008000030c <arch_get_minstret>:
+0000000080000308 <arch_get_minstret>:
 
 uint64_t arch_get_minstret()
 {
   uint64_t x;
   asm volatile("csrr %0, minstret" : "=r" (x));
-    8000030c:	b0202573          	csrr	a0,minstret
+    80000308:	b0202573          	csrr	a0,minstret
   return  x;
 }
-    80000310:	8082                	ret
+    8000030c:	8082                	ret
 
-0000000080000312 <arch_get_miss>:
+000000008000030e <arch_get_miss>:
 
 uint64_t arch_get_miss()
 {
   uint64_t x;
   asm volatile("csrr %0, 0xB04" : "=r" (x));
-    80000312:	b0402573          	csrr	a0,mhpmcounter4
+    8000030e:	b0402573          	csrr	a0,mhpmcounter4
   return  x;
 }
-    80000316:	8082                	ret
+    80000312:	8082                	ret
 
-0000000080000318 <arch_get_load>:
+0000000080000314 <arch_get_load>:
 
 uint64_t arch_get_load()
 {
   uint64_t x;
   asm volatile("csrr %0, 0xB07" : "=r" (x));
-    80000318:	b0702573          	csrr	a0,mhpmcounter7
+    80000314:	b0702573          	csrr	a0,mhpmcounter7
   return  x;
 }
-    8000031c:	8082                	ret
+    80000318:	8082                	ret
 
-000000008000031e <arch_get_store>:
+000000008000031a <arch_get_store>:
 
 uint64_t arch_get_store()
 {
   uint64_t x;
   asm volatile("csrr %0, 0xB08" : "=r" (x));
-    8000031e:	b0802573          	csrr	a0,mhpmcounter8
+    8000031a:	b0802573          	csrr	a0,mhpmcounter8
   return  x;
 }
-    80000322:	8082                	ret
+    8000031e:	8082                	ret
 
-0000000080000324 <arch_get_cacheline_in>:
+0000000080000320 <arch_get_cacheline_in>:
 
 uint64_t arch_get_cacheline_in()
 {
   uint64_t x;
   asm volatile("csrr %0, 0xB11" : "=r" (x));
-    80000324:	b1102573          	csrr	a0,mhpmcounter17
+    80000320:	b1102573          	csrr	a0,mhpmcounter17
   return  x;
 }
-    80000328:	8082                	ret
+    80000324:	8082                	ret
 
-000000008000032a <arch_get_cacheline_out>:
+0000000080000326 <arch_get_cacheline_out>:
 
 uint64_t arch_get_cacheline_out()
 {
   uint64_t x;
   asm volatile("csrr %0, 0xB12" : "=r" (x));
-    8000032a:	b1202573          	csrr	a0,mhpmcounter18
+    80000326:	b1202573          	csrr	a0,mhpmcounter18
   return  x;
 }
-    8000032e:	8082                	ret
+    8000032a:	8082                	ret
 
-0000000080000330 <arch_get_inv>:
+000000008000032c <arch_get_inv>:
 
 uint64_t arch_get_inv()
 {
   uint64_t x;
   asm volatile("csrr %0, 0xB13" : "=r" (x));
-    80000330:	b1302573          	csrr	a0,mhpmcounter19
+    8000032c:	b1302573          	csrr	a0,mhpmcounter19
   return  x;
 }
-    80000334:	8082                	ret
+    80000330:	8082                	ret
 
-0000000080000336 <arch_get_wb_inv>:
+0000000080000332 <arch_get_wb_inv>:
 
 uint64_t arch_get_wb_inv()
 {
   uint64_t x;
   asm volatile("csrr %0, 0xB14" : "=r" (x));
-    80000336:	b1402573          	csrr	a0,mhpmcounter20
+    80000332:	b1402573          	csrr	a0,mhpmcounter20
   return  x;
 }
-    8000033a:	8082                	ret
+    80000336:	8082                	ret
 
-000000008000033c <arch_get_miss_tot>:
+0000000080000338 <arch_get_miss_tot>:
 
 uint64_t arch_get_miss_tot()
 {
   uint64_t x;
   asm volatile("csrr %0, 0xB15" : "=r" (x));
-    8000033c:	b1502573          	csrr	a0,mhpmcounter21
+    80000338:	b1502573          	csrr	a0,mhpmcounter21
   return  x;
 }
-    80000340:	8082                	ret
+    8000033c:	8082                	ret
 
-0000000080000342 <arch_get_amo>:
+000000008000033e <arch_get_amo>:
 
 uint64_t arch_get_amo()
 {
   uint64_t x;
   asm volatile("csrr %0, 0xB16" : "=r" (x));
-    80000342:	b1602573          	csrr	a0,mhpmcounter22
+    8000033e:	b1602573          	csrr	a0,mhpmcounter22
   return  x;
 }
-    80000346:	8082                	ret
+    80000342:	8082                	ret
 
-0000000080000348 <barrier_wait>:
+0000000080000344 <barrier_wait>:
     volatile uint64_t* barrier
   , uint64_t incr_amount
   , uint64_t reach
   )
 {
   asm volatile (
-    80000348:	00b5332f          	amoadd.d	t1,a1,(a0)
-    8000034c:	0ff0000f          	fence
-    80000350:	00053303          	ld	t1,0(a0)
-    80000354:	fec31ce3          	bne	t1,a2,8000034c <barrier_wait+0x4>
+    80000344:	00b5332f          	amoadd.d	t1,a1,(a0)
+    80000348:	0ff0000f          	fence
+    8000034c:	00053303          	ld	t1,0(a0)
+    80000350:	fec31ce3          	bne	t1,a2,80000348 <barrier_wait+0x4>
     "r"(incr_amount),
     "r"(reach)
   : /* clobbered registers */
     "x6"
   );
 }
-    80000358:	8082                	ret
+    80000354:	8082                	ret
 
-000000008000035a <arch_barrier_up>:
+0000000080000356 <arch_barrier_up>:
 
 void arch_barrier_up()
 {
-    8000035a:	1141                	addi	sp,sp,-16
-    8000035c:	e406                	sd	ra,8(sp)
+    80000356:	1141                	addi	sp,sp,-16
+    80000358:	e406                	sd	ra,8(sp)
   barrier_wait(&barrier1, 1, NUM_PROCESSES);
-    8000035e:	4609                	li	a2,2
-    80000360:	4585                	li	a1,1
-    80000362:	00000517          	auipc	a0,0x0
-    80000366:	44e50513          	addi	a0,a0,1102 # 800007b0 <barrier1>
-    8000036a:	fdfff0ef          	jal	ra,80000348 <barrier_wait>
+    8000035a:	4609                	li	a2,2
+    8000035c:	4585                	li	a1,1
+    8000035e:	00000517          	auipc	a0,0x0
+    80000362:	45250513          	addi	a0,a0,1106 # 800007b0 <barrier1>
+    80000366:	fdfff0ef          	jal	ra,80000344 <barrier_wait>
   barrier_wait(&barrier2, 1, NUM_PROCESSES);
-    8000036e:	4609                	li	a2,2
-    80000370:	4585                	li	a1,1
-    80000372:	00000517          	auipc	a0,0x0
-    80000376:	44650513          	addi	a0,a0,1094 # 800007b8 <barrier2>
-    8000037a:	fcfff0ef          	jal	ra,80000348 <barrier_wait>
+    8000036a:	4609                	li	a2,2
+    8000036c:	4585                	li	a1,1
+    8000036e:	00000517          	auipc	a0,0x0
+    80000372:	44a50513          	addi	a0,a0,1098 # 800007b8 <barrier2>
+    80000376:	fcfff0ef          	jal	ra,80000344 <barrier_wait>
 }
-    8000037e:	60a2                	ld	ra,8(sp)
-    80000380:	0141                	addi	sp,sp,16
-    80000382:	8082                	ret
+    8000037a:	60a2                	ld	ra,8(sp)
+    8000037c:	0141                	addi	sp,sp,16
+    8000037e:	8082                	ret
 
-0000000080000384 <arch_barrier_down>:
+0000000080000380 <arch_barrier_down>:
 
 void arch_barrier_down()
 {
-    80000384:	1141                	addi	sp,sp,-16
-    80000386:	e406                	sd	ra,8(sp)
+    80000380:	1141                	addi	sp,sp,-16
+    80000382:	e406                	sd	ra,8(sp)
   barrier_wait(&barrier1, -1, 0);
-    80000388:	4601                	li	a2,0
-    8000038a:	55fd                	li	a1,-1
-    8000038c:	00000517          	auipc	a0,0x0
-    80000390:	42450513          	addi	a0,a0,1060 # 800007b0 <barrier1>
-    80000394:	fb5ff0ef          	jal	ra,80000348 <barrier_wait>
+    80000384:	4601                	li	a2,0
+    80000386:	55fd                	li	a1,-1
+    80000388:	00000517          	auipc	a0,0x0
+    8000038c:	42850513          	addi	a0,a0,1064 # 800007b0 <barrier1>
+    80000390:	fb5ff0ef          	jal	ra,80000344 <barrier_wait>
   barrier_wait(&barrier2, -1, 0);
-    80000398:	4601                	li	a2,0
-    8000039a:	55fd                	li	a1,-1
-    8000039c:	00000517          	auipc	a0,0x0
-    800003a0:	41c50513          	addi	a0,a0,1052 # 800007b8 <barrier2>
-    800003a4:	fa5ff0ef          	jal	ra,80000348 <barrier_wait>
+    80000394:	4601                	li	a2,0
+    80000396:	55fd                	li	a1,-1
+    80000398:	00000517          	auipc	a0,0x0
+    8000039c:	42050513          	addi	a0,a0,1056 # 800007b8 <barrier2>
+    800003a0:	fa5ff0ef          	jal	ra,80000344 <barrier_wait>
 }
-    800003a8:	60a2                	ld	ra,8(sp)
-    800003aa:	0141                	addi	sp,sp,16
-    800003ac:	8082                	ret
+    800003a4:	60a2                	ld	ra,8(sp)
+    800003a6:	0141                	addi	sp,sp,16
+    800003a8:	8082                	ret
 
-00000000800003ae <acquire>:
+00000000800003aa <arch_generic_barrier>:
 
+void arch_generic_barrier()
+{
+  asm volatile (
+    800003aa:	0001                	nop
+    800003ac:	0ff0000f          	fence
+
+      "nop                    \n"
+      "fence                   \n"
+      );
+}
+    800003b0:	8082                	ret
+
+00000000800003b2 <acquire>:
 
 void acquire(volatile uint32_t * lock)
 {
   asm volatile (
-    800003ae:	4285                	li	t0,1
+    800003b2:	4285                	li	t0,1
 
-00000000800003b0 <again>:
-    800003b0:	0c5522af          	amoswap.w.aq	t0,t0,(a0)
-    800003b4:	fe029ee3          	bnez	t0,800003b0 <again>
+00000000800003b4 <again>:
+    800003b4:	0c5522af          	amoswap.w.aq	t0,t0,(a0)
+    800003b8:	fe029ee3          	bnez	t0,800003b4 <again>
       "bnez t0, again             \n"
       
   : /* output operands */
   : /* input operands */
     "r"(lock));
 }
-    800003b8:	8082                	ret
+    800003bc:	8082                	ret
 
-00000000800003ba <release>:
+00000000800003be <release>:
 
 void release(volatile uint32_t * lock)
 {
   asm volatile (
-    800003ba:	0001                	nop
-    800003bc:	0a05202f          	amoswap.w.rl	zero,zero,(a0)
+    800003be:	0001                	nop
+    800003c0:	0a05202f          	amoswap.w.rl	zero,zero,(a0)
       "nop                      \n"
       "amoswap.w.rl x0, x0, (%0)\n"
   : /* output operands */
   : /* input operands */
     "r"(lock));
 }
-    800003c0:	8082                	ret
+    800003c4:	8082                	ret
 
-00000000800003c2 <put_char>:
+00000000800003c6 <put_char>:
   print_uart(consoleBuffer,consoleBufferLen);
   consoleBufferLen = 0;
 
 }*/
 void put_char(char c)
 {
-    800003c2:	1141                	addi	sp,sp,-16
-    800003c4:	e406                	sd	ra,8(sp)
+    800003c6:	1141                	addi	sp,sp,-16
+    800003c8:	e406                	sd	ra,8(sp)
 
   write_serial(c);
-    800003c6:	02c000ef          	jal	ra,800003f2 <write_serial>
+    800003ca:	02c000ef          	jal	ra,800003f6 <write_serial>
 }
-    800003ca:	60a2                	ld	ra,8(sp)
-    800003cc:	0141                	addi	sp,sp,16
-    800003ce:	8082                	ret
+    800003ce:	60a2                	ld	ra,8(sp)
+    800003d0:	0141                	addi	sp,sp,16
+    800003d2:	8082                	ret
 
-00000000800003d0 <write_reg_u8>:
+00000000800003d4 <write_reg_u8>:
 #include "uart.h"
 
 void write_reg_u8(uintptr_t addr, uint8_t value)
 {
     volatile uint8_t *loc_addr = (volatile uint8_t *)addr;
     *loc_addr = value;
-    800003d0:	00b50023          	sb	a1,0(a0)
+    800003d4:	00b50023          	sb	a1,0(a0)
 }
-    800003d4:	8082                	ret
+    800003d8:	8082                	ret
 
-00000000800003d6 <read_reg_u8>:
+00000000800003da <read_reg_u8>:
 
 uint8_t read_reg_u8(uintptr_t addr)
 {
     return *(volatile uint8_t *)addr;
-    800003d6:	00054503          	lbu	a0,0(a0)
+    800003da:	00054503          	lbu	a0,0(a0)
 }
-    800003da:	0ff57513          	zext.b	a0,a0
-    800003de:	8082                	ret
+    800003de:	0ff57513          	zext.b	a0,a0
+    800003e2:	8082                	ret
 
-00000000800003e0 <is_transmit_empty>:
+00000000800003e4 <is_transmit_empty>:
     return *(volatile uint8_t *)addr;
-    800003e0:	100007b7          	lui	a5,0x10000
-    800003e4:	0147c503          	lbu	a0,20(a5) # 10000014 <HARTID+0xffff100>
-    800003e8:	0ff57513          	zext.b	a0,a0
+    800003e4:	100007b7          	lui	a5,0x10000
+    800003e8:	0147c503          	lbu	a0,20(a5) # 10000014 <HARTID+0xffff100>
+    800003ec:	0ff57513          	zext.b	a0,a0
 
 int is_transmit_empty()
 {
     return read_reg_u8(UART_LINE_STATUS) & 0x20;
 }
-    800003ec:	02057513          	andi	a0,a0,32
-    800003f0:	8082                	ret
+    800003f0:	02057513          	andi	a0,a0,32
+    800003f4:	8082                	ret
 
-00000000800003f2 <write_serial>:
+00000000800003f6 <write_serial>:
     return *(volatile uint8_t *)addr;
-    800003f2:	10000737          	lui	a4,0x10000
-    800003f6:	01474783          	lbu	a5,20(a4) # 10000014 <HARTID+0xffff100>
-    800003fa:	0ff7f793          	zext.b	a5,a5
+    800003f6:	10000737          	lui	a4,0x10000
+    800003fa:	01474783          	lbu	a5,20(a4) # 10000014 <HARTID+0xffff100>
+    800003fe:	0ff7f793          	zext.b	a5,a5
 
 void write_serial(char a)
 {
     while (is_transmit_empty() == 0) {};
-    800003fe:	0207f793          	andi	a5,a5,32
-    80000402:	dbf5                	beqz	a5,800003f6 <write_serial+0x4>
+    80000402:	0207f793          	andi	a5,a5,32
+    80000406:	dbf5                	beqz	a5,800003fa <write_serial+0x4>
     *loc_addr = value;
-    80000404:	100007b7          	lui	a5,0x10000
-    80000408:	00a78023          	sb	a0,0(a5) # 10000000 <HARTID+0xffff0ec>
+    80000408:	100007b7          	lui	a5,0x10000
+    8000040c:	00a78023          	sb	a0,0(a5) # 10000000 <HARTID+0xffff0ec>
     //for (int i = 0; i < 100; i++){i++;}
 
     write_reg_u8(UART_THR, a);
 }
-    8000040c:	8082                	ret
+    80000410:	8082                	ret
 
-000000008000040e <init_uart>:
+0000000080000412 <init_uart>:
 
 void init_uart(uint32_t freq, uint32_t baud)
 {
     uint32_t divisor = freq / (baud << 4);
-    8000040e:	0045959b          	slliw	a1,a1,0x4
-    80000412:	02b5553b          	divuw	a0,a0,a1
+    80000412:	0045959b          	slliw	a1,a1,0x4
+    80000416:	02b5553b          	divuw	a0,a0,a1
     *loc_addr = value;
-    80000416:	100007b7          	lui	a5,0x10000
-    8000041a:	00078223          	sb	zero,4(a5) # 10000004 <HARTID+0xffff0f0>
-    8000041e:	f8000713          	li	a4,-128
-    80000422:	00e78623          	sb	a4,12(a5)
+    8000041a:	100007b7          	lui	a5,0x10000
+    8000041e:	00078223          	sb	zero,4(a5) # 10000004 <HARTID+0xffff0f0>
+    80000422:	f8000713          	li	a4,-128
+    80000426:	00e78623          	sb	a4,12(a5)
 
     write_reg_u8(UART_INTERRUPT_ENABLE, 0x00); // Disable all interrupts
     write_reg_u8(UART_LINE_CONTROL, 0x80);     // Enable DLAB (set baud rate divisor)
     write_reg_u8(UART_DLAB_LSB, divisor);         // divisor (lo byte)
-    80000426:	0ff57713          	zext.b	a4,a0
+    8000042a:	0ff57713          	zext.b	a4,a0
     *loc_addr = value;
-    8000042a:	00e78023          	sb	a4,0(a5)
+    8000042e:	00e78023          	sb	a4,0(a5)
     write_reg_u8(UART_DLAB_MSB, (divisor >> 8) & 0xFF);  // divisor (hi byte)
-    8000042e:	0085551b          	srliw	a0,a0,0x8
-    80000432:	0ff57513          	zext.b	a0,a0
+    80000432:	0085551b          	srliw	a0,a0,0x8
+    80000436:	0ff57513          	zext.b	a0,a0
     *loc_addr = value;
-    80000436:	00a78223          	sb	a0,4(a5)
-    8000043a:	470d                	li	a4,3
-    8000043c:	00e78623          	sb	a4,12(a5)
-    80000440:	fc700713          	li	a4,-57
-    80000444:	00e78423          	sb	a4,8(a5)
-    80000448:	02000713          	li	a4,32
-    8000044c:	00e78823          	sb	a4,16(a5)
+    8000043a:	00a78223          	sb	a0,4(a5)
+    8000043e:	470d                	li	a4,3
+    80000440:	00e78623          	sb	a4,12(a5)
+    80000444:	fc700713          	li	a4,-57
+    80000448:	00e78423          	sb	a4,8(a5)
+    8000044c:	02000713          	li	a4,32
+    80000450:	00e78823          	sb	a4,16(a5)
     write_reg_u8(UART_LINE_CONTROL, 0x03);     // 8 bits, no parity, one stop bit
     write_reg_u8(UART_FIFO_CONTROL, 0xC7);     // Enable FIFO, clear them, with 14-byte threshold
     write_reg_u8(UART_MODEM_CONTROL, 0x20);    // Autoflow mode
 }
-    80000450:	8082                	ret
+    80000454:	8082                	ret
 
-0000000080000452 <print_uart>:
+0000000080000456 <print_uart>:
 
 void print_uart(char *str,int length)
 {
     char *cur = &str[0];
     for (int i = 0; i < length; i++)
-    80000452:	02b05963          	blez	a1,80000484 <print_uart+0x32>
+    80000456:	02b05963          	blez	a1,80000488 <print_uart+0x32>
 {
-    80000456:	1101                	addi	sp,sp,-32
-    80000458:	ec06                	sd	ra,24(sp)
-    8000045a:	e822                	sd	s0,16(sp)
-    8000045c:	e426                	sd	s1,8(sp)
-    8000045e:	842a                	mv	s0,a0
-    80000460:	fff5849b          	addiw	s1,a1,-1
-    80000464:	1482                	slli	s1,s1,0x20
-    80000466:	9081                	srli	s1,s1,0x20
-    80000468:	0485                	addi	s1,s1,1
-    8000046a:	94aa                	add	s1,s1,a0
+    8000045a:	1101                	addi	sp,sp,-32
+    8000045c:	ec06                	sd	ra,24(sp)
+    8000045e:	e822                	sd	s0,16(sp)
+    80000460:	e426                	sd	s1,8(sp)
+    80000462:	842a                	mv	s0,a0
+    80000464:	fff5849b          	addiw	s1,a1,-1
+    80000468:	1482                	slli	s1,s1,0x20
+    8000046a:	9081                	srli	s1,s1,0x20
+    8000046c:	0485                	addi	s1,s1,1
+    8000046e:	94aa                	add	s1,s1,a0
     {
         write_serial((uint8_t)*cur);
-    8000046c:	00044503          	lbu	a0,0(s0)
-    80000470:	f83ff0ef          	jal	ra,800003f2 <write_serial>
+    80000470:	00044503          	lbu	a0,0(s0)
+    80000474:	f83ff0ef          	jal	ra,800003f6 <write_serial>
         ++cur;
-    80000474:	0405                	addi	s0,s0,1
+    80000478:	0405                	addi	s0,s0,1
     for (int i = 0; i < length; i++)
-    80000476:	fe941be3          	bne	s0,s1,8000046c <print_uart+0x1a>
+    8000047a:	fe941be3          	bne	s0,s1,80000470 <print_uart+0x1a>
     /*while (*cur != '\0')
     {
         write_serial((uint8_t)*cur);
         ++cur;
     }*/
 }
-    8000047a:	60e2                	ld	ra,24(sp)
-    8000047c:	6442                	ld	s0,16(sp)
-    8000047e:	64a2                	ld	s1,8(sp)
-    80000480:	6105                	addi	sp,sp,32
-    80000482:	8082                	ret
-    80000484:	8082                	ret
+    8000047e:	60e2                	ld	ra,24(sp)
+    80000480:	6442                	ld	s0,16(sp)
+    80000482:	64a2                	ld	s1,8(sp)
+    80000484:	6105                	addi	sp,sp,32
+    80000486:	8082                	ret
+    80000488:	8082                	ret
 
-0000000080000486 <bin_to_hex>:
+000000008000048a <bin_to_hex>:
 uint8_t bin_to_hex_table[16] = {
     '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
 void bin_to_hex(uint8_t inp, uint8_t res[2])
 {
     res[1] = bin_to_hex_table[inp & 0xf];
-    80000486:	00001797          	auipc	a5,0x1
-    8000048a:	94a78793          	addi	a5,a5,-1718 # 80000dd0 <bin_to_hex_table>
-    8000048e:	00f57713          	andi	a4,a0,15
-    80000492:	973e                	add	a4,a4,a5
-    80000494:	00074703          	lbu	a4,0(a4)
-    80000498:	00e580a3          	sb	a4,1(a1)
+    8000048a:	00003797          	auipc	a5,0x3
+    8000048e:	37678793          	addi	a5,a5,886 # 80003800 <bin_to_hex_table>
+    80000492:	00f57713          	andi	a4,a0,15
+    80000496:	973e                	add	a4,a4,a5
+    80000498:	00074703          	lbu	a4,0(a4)
+    8000049c:	00e580a3          	sb	a4,1(a1)
     res[0] = bin_to_hex_table[(inp >> 4) & 0xf];
-    8000049c:	8111                	srli	a0,a0,0x4
-    8000049e:	97aa                	add	a5,a5,a0
-    800004a0:	0007c783          	lbu	a5,0(a5)
-    800004a4:	00f58023          	sb	a5,0(a1)
+    800004a0:	8111                	srli	a0,a0,0x4
+    800004a2:	97aa                	add	a5,a5,a0
+    800004a4:	0007c783          	lbu	a5,0(a5)
+    800004a8:	00f58023          	sb	a5,0(a1)
     return;
 }
-    800004a8:	8082                	ret
+    800004ac:	8082                	ret
 
-00000000800004aa <print_uart_int>:
+00000000800004ae <print_uart_int>:
 
 void print_uart_int(uint32_t addr)
 {
-    800004aa:	7139                	addi	sp,sp,-64
-    800004ac:	fc06                	sd	ra,56(sp)
-    800004ae:	f822                	sd	s0,48(sp)
-    800004b0:	f426                	sd	s1,40(sp)
-    800004b2:	f04a                	sd	s2,32(sp)
-    800004b4:	ec4e                	sd	s3,24(sp)
-    800004b6:	89aa                	mv	s3,a0
-    800004b8:	4461                	li	s0,24
+    800004ae:	7139                	addi	sp,sp,-64
+    800004b0:	fc06                	sd	ra,56(sp)
+    800004b2:	f822                	sd	s0,48(sp)
+    800004b4:	f426                	sd	s1,40(sp)
+    800004b6:	f04a                	sd	s2,32(sp)
+    800004b8:	ec4e                	sd	s3,24(sp)
+    800004ba:	89aa                	mv	s3,a0
+    800004bc:	4461                	li	s0,24
     int i;
     for (i = 3; i > -1; i--)
     {
         uint8_t cur = (addr >> (i * 8)) & 0xff;
         uint8_t hex[2];
         bin_to_hex(cur, hex);
-    800004ba:	00810913          	addi	s2,sp,8
+    800004be:	00810913          	addi	s2,sp,8
     for (i = 3; i > -1; i--)
-    800004be:	54e1                	li	s1,-8
+    800004c2:	54e1                	li	s1,-8
         uint8_t cur = (addr >> (i * 8)) & 0xff;
-    800004c0:	0089d53b          	srlw	a0,s3,s0
+    800004c4:	0089d53b          	srlw	a0,s3,s0
         bin_to_hex(cur, hex);
-    800004c4:	85ca                	mv	a1,s2
-    800004c6:	0ff57513          	zext.b	a0,a0
-    800004ca:	fbdff0ef          	jal	ra,80000486 <bin_to_hex>
+    800004c8:	85ca                	mv	a1,s2
+    800004ca:	0ff57513          	zext.b	a0,a0
+    800004ce:	fbdff0ef          	jal	ra,8000048a <bin_to_hex>
         write_serial(hex[0]);
-    800004ce:	00814503          	lbu	a0,8(sp)
-    800004d2:	f21ff0ef          	jal	ra,800003f2 <write_serial>
+    800004d2:	00814503          	lbu	a0,8(sp)
+    800004d6:	f21ff0ef          	jal	ra,800003f6 <write_serial>
         write_serial(hex[1]);
-    800004d6:	00914503          	lbu	a0,9(sp)
-    800004da:	f19ff0ef          	jal	ra,800003f2 <write_serial>
+    800004da:	00914503          	lbu	a0,9(sp)
+    800004de:	f19ff0ef          	jal	ra,800003f6 <write_serial>
     for (i = 3; i > -1; i--)
-    800004de:	3461                	addiw	s0,s0,-8
-    800004e0:	fe9410e3          	bne	s0,s1,800004c0 <print_uart_int+0x16>
+    800004e2:	3461                	addiw	s0,s0,-8
+    800004e4:	fe9410e3          	bne	s0,s1,800004c4 <print_uart_int+0x16>
     }
 }
-    800004e4:	70e2                	ld	ra,56(sp)
-    800004e6:	7442                	ld	s0,48(sp)
-    800004e8:	74a2                	ld	s1,40(sp)
-    800004ea:	7902                	ld	s2,32(sp)
-    800004ec:	69e2                	ld	s3,24(sp)
-    800004ee:	6121                	addi	sp,sp,64
-    800004f0:	8082                	ret
+    800004e8:	70e2                	ld	ra,56(sp)
+    800004ea:	7442                	ld	s0,48(sp)
+    800004ec:	74a2                	ld	s1,40(sp)
+    800004ee:	7902                	ld	s2,32(sp)
+    800004f0:	69e2                	ld	s3,24(sp)
+    800004f2:	6121                	addi	sp,sp,64
+    800004f4:	8082                	ret
 
-00000000800004f2 <print_uart_addr>:
+00000000800004f6 <print_uart_addr>:
 
 void print_uart_addr(uint64_t addr)
 {
-    800004f2:	7139                	addi	sp,sp,-64
-    800004f4:	fc06                	sd	ra,56(sp)
-    800004f6:	f822                	sd	s0,48(sp)
-    800004f8:	f426                	sd	s1,40(sp)
-    800004fa:	f04a                	sd	s2,32(sp)
-    800004fc:	ec4e                	sd	s3,24(sp)
-    800004fe:	89aa                	mv	s3,a0
-    80000500:	03800413          	li	s0,56
+    800004f6:	7139                	addi	sp,sp,-64
+    800004f8:	fc06                	sd	ra,56(sp)
+    800004fa:	f822                	sd	s0,48(sp)
+    800004fc:	f426                	sd	s1,40(sp)
+    800004fe:	f04a                	sd	s2,32(sp)
+    80000500:	ec4e                	sd	s3,24(sp)
+    80000502:	89aa                	mv	s3,a0
+    80000504:	03800413          	li	s0,56
     int i;
     for (i = 7; i > -1; i--)
     {
         uint8_t cur = (addr >> (i * 8)) & 0xff;
         uint8_t hex[2];
         bin_to_hex(cur, hex);
-    80000504:	00810913          	addi	s2,sp,8
+    80000508:	00810913          	addi	s2,sp,8
     for (i = 7; i > -1; i--)
-    80000508:	54e1                	li	s1,-8
+    8000050c:	54e1                	li	s1,-8
         uint8_t cur = (addr >> (i * 8)) & 0xff;
-    8000050a:	0089d533          	srl	a0,s3,s0
+    8000050e:	0089d533          	srl	a0,s3,s0
         bin_to_hex(cur, hex);
-    8000050e:	85ca                	mv	a1,s2
-    80000510:	0ff57513          	zext.b	a0,a0
-    80000514:	f73ff0ef          	jal	ra,80000486 <bin_to_hex>
+    80000512:	85ca                	mv	a1,s2
+    80000514:	0ff57513          	zext.b	a0,a0
+    80000518:	f73ff0ef          	jal	ra,8000048a <bin_to_hex>
         write_serial(hex[0]);
-    80000518:	00814503          	lbu	a0,8(sp)
-    8000051c:	ed7ff0ef          	jal	ra,800003f2 <write_serial>
+    8000051c:	00814503          	lbu	a0,8(sp)
+    80000520:	ed7ff0ef          	jal	ra,800003f6 <write_serial>
         write_serial(hex[1]);
-    80000520:	00914503          	lbu	a0,9(sp)
-    80000524:	ecfff0ef          	jal	ra,800003f2 <write_serial>
+    80000524:	00914503          	lbu	a0,9(sp)
+    80000528:	ecfff0ef          	jal	ra,800003f6 <write_serial>
     for (i = 7; i > -1; i--)
-    80000528:	3461                	addiw	s0,s0,-8
-    8000052a:	fe9410e3          	bne	s0,s1,8000050a <print_uart_addr+0x18>
+    8000052c:	3461                	addiw	s0,s0,-8
+    8000052e:	fe9410e3          	bne	s0,s1,8000050e <print_uart_addr+0x18>
     }
 }
-    8000052e:	70e2                	ld	ra,56(sp)
-    80000530:	7442                	ld	s0,48(sp)
-    80000532:	74a2                	ld	s1,40(sp)
-    80000534:	7902                	ld	s2,32(sp)
-    80000536:	69e2                	ld	s3,24(sp)
-    80000538:	6121                	addi	sp,sp,64
-    8000053a:	8082                	ret
+    80000532:	70e2                	ld	ra,56(sp)
+    80000534:	7442                	ld	s0,48(sp)
+    80000536:	74a2                	ld	s1,40(sp)
+    80000538:	7902                	ld	s2,32(sp)
+    8000053a:	69e2                	ld	s3,24(sp)
+    8000053c:	6121                	addi	sp,sp,64
+    8000053e:	8082                	ret
 
-000000008000053c <print_uart_byte>:
+0000000080000540 <print_uart_byte>:
 
 void print_uart_byte(uint8_t byte)
 {
-    8000053c:	1101                	addi	sp,sp,-32
-    8000053e:	ec06                	sd	ra,24(sp)
+    80000540:	1101                	addi	sp,sp,-32
+    80000542:	ec06                	sd	ra,24(sp)
     uint8_t hex[2];
     bin_to_hex(byte, hex);
-    80000540:	002c                	addi	a1,sp,8
-    80000542:	f45ff0ef          	jal	ra,80000486 <bin_to_hex>
+    80000544:	002c                	addi	a1,sp,8
+    80000546:	f45ff0ef          	jal	ra,8000048a <bin_to_hex>
     write_serial(hex[0]);
-    80000546:	00814503          	lbu	a0,8(sp)
-    8000054a:	ea9ff0ef          	jal	ra,800003f2 <write_serial>
+    8000054a:	00814503          	lbu	a0,8(sp)
+    8000054e:	ea9ff0ef          	jal	ra,800003f6 <write_serial>
     write_serial(hex[1]);
-    8000054e:	00914503          	lbu	a0,9(sp)
-    80000552:	ea1ff0ef          	jal	ra,800003f2 <write_serial>
-    80000556:	60e2                	ld	ra,24(sp)
-    80000558:	6105                	addi	sp,sp,32
-    8000055a:	8082                	ret
+    80000552:	00914503          	lbu	a0,9(sp)
+    80000556:	ea1ff0ef          	jal	ra,800003f6 <write_serial>
+    8000055a:	60e2                	ld	ra,24(sp)
+    8000055c:	6105                	addi	sp,sp,32
+    8000055e:	8082                	ret
 
-000000008000055c <test_check_coherence>:
+0000000080000560 <test_check_coherence>:
 // =========
 // Functions
 // =========
 
 int test_check_coherence()
 {
-    8000055c:	1141                	addi	sp,sp,-16
-    8000055e:	e406                	sd	ra,8(sp)
+    80000560:	1141                	addi	sp,sp,-16
+    80000562:	e406                	sd	ra,8(sp)
   //put_string("test_init started\r\n");
 
   #if defined COUNTER
     return counter_check();
   #elif defined RAND_RW
     return rand_rw_check();
-    80000560:	246000ef          	jal	ra,800007a6 <rand_rw_check>
+    80000564:	246000ef          	jal	ra,800007aa <rand_rw_check>
   #else
     return shared_queue_check();
   #endif
 
 }
-    80000564:	60a2                	ld	ra,8(sp)
-    80000566:	0141                	addi	sp,sp,16
-    80000568:	8082                	ret
+    80000568:	60a2                	ld	ra,8(sp)
+    8000056a:	0141                	addi	sp,sp,16
+    8000056c:	8082                	ret
 
-000000008000056a <test_init>:
+000000008000056e <test_init>:
 
 void test_init()
 {
-    8000056a:	1141                	addi	sp,sp,-16
-    8000056c:	e406                	sd	ra,8(sp)
+    8000056e:	1141                	addi	sp,sp,-16
+    80000570:	e406                	sd	ra,8(sp)
   //put_string("test_init started\r\n");
   #if defined COUNTER
     counter_init();
   #elif defined RAND_RW
     rand_rw_init();
-    8000056e:	036000ef          	jal	ra,800005a4 <rand_rw_init>
+    80000572:	036000ef          	jal	ra,800005a8 <rand_rw_init>
   #else
     shared_queue_init();
   #endif
 
 }
-    80000572:	60a2                	ld	ra,8(sp)
-    80000574:	0141                	addi	sp,sp,16
-    80000576:	8082                	ret
+    80000576:	60a2                	ld	ra,8(sp)
+    80000578:	0141                	addi	sp,sp,16
+    8000057a:	8082                	ret
 
-0000000080000578 <test_print>:
+000000008000057c <test_print>:
 
 
 void test_print()
 {
-    80000578:	1141                	addi	sp,sp,-16
-    8000057a:	e406                	sd	ra,8(sp)
+    8000057c:	1141                	addi	sp,sp,-16
+    8000057e:	e406                	sd	ra,8(sp)
   //put_string("test_init started\r\n");
   #if defined COUNTER
     counter_print();
   #elif defined RAND_RW
     rand_rw_print();
-    8000057c:	032000ef          	jal	ra,800005ae <rand_rw_print>
+    80000580:	032000ef          	jal	ra,800005b2 <rand_rw_print>
   #else
     shared_queue_print();
   #endif
 
 }
-    80000580:	60a2                	ld	ra,8(sp)
-    80000582:	0141                	addi	sp,sp,16
-    80000584:	8082                	ret
+    80000584:	60a2                	ld	ra,8(sp)
+    80000586:	0141                	addi	sp,sp,16
+    80000588:	8082                	ret
 
-0000000080000586 <test_body>:
+000000008000058a <test_body>:
 
 
 void test_body(int pid) {
-    80000586:	1141                	addi	sp,sp,-16
-    80000588:	e406                	sd	ra,8(sp)
-    8000058a:	e022                	sd	s0,0(sp)
-    8000058c:	842a                	mv	s0,a0
+    8000058a:	1141                	addi	sp,sp,-16
+    8000058c:	e406                	sd	ra,8(sp)
+    8000058e:	e022                	sd	s0,0(sp)
+    80000590:	842a                	mv	s0,a0
 
   //sync start of test
   arch_barrier_up();
-    8000058e:	dcdff0ef          	jal	ra,8000035a <arch_barrier_up>
+    80000592:	dc5ff0ef          	jal	ra,80000356 <arch_barrier_up>
   monitors.start_time[pid] = arch_get_counter();*/
 
 #if defined COUNTER
   counter_op(pid);
 #elif defined RAND_RW
   rand_rw_op(pid);
-    80000592:	8522                	mv	a0,s0
-    80000594:	04a000ef          	jal	ra,800005de <rand_rw_op>
+    80000596:	8522                	mv	a0,s0
+    80000598:	04a000ef          	jal	ra,800005e2 <rand_rw_op>
 
 
 
 
   //sync end of test
   arch_barrier_down();
-    80000598:	dedff0ef          	jal	ra,80000384 <arch_barrier_down>
+    8000059c:	de5ff0ef          	jal	ra,80000380 <arch_barrier_down>
   monitors.end_amo[pid] = arch_get_amo();
   monitors.end_minstret[pid] = arch_get_minstret();
   monitors.end_time = arch_get_counter(); */   
 
   
 }
-    8000059c:	60a2                	ld	ra,8(sp)
-    8000059e:	6402                	ld	s0,0(sp)
-    800005a0:	0141                	addi	sp,sp,16
-    800005a2:	8082                	ret
+    800005a0:	60a2                	ld	ra,8(sp)
+    800005a2:	6402                	ld	s0,0(sp)
+    800005a4:	0141                	addi	sp,sp,16
+    800005a6:	8082                	ret
 
-00000000800005a4 <rand_rw_init>:
+00000000800005a8 <rand_rw_init>:
 static rand_rw_t rand_rw;
 
 
 void rand_rw_init()
 {
 	rand_rw.lock = 0;
-    800005a4:	00000797          	auipc	a5,0x0
-    800005a8:	6c07a623          	sw	zero,1740(a5) # 80000c70 <rand_rw+0x4b0>
+    800005a8:	00003797          	auipc	a5,0x3
+    800005ac:	0e07ac23          	sw	zero,248(a5) # 800036a0 <rand_rw+0x2ee0>
 }
-    800005ac:	8082                	ret
+    800005b0:	8082                	ret
 
-00000000800005ae <rand_rw_print>:
+00000000800005b2 <rand_rw_print>:
 
 void rand_rw_print(){
-    800005ae:	1141                	addi	sp,sp,-16
-    800005b0:	e406                	sd	ra,8(sp)
+    800005b2:	1141                	addi	sp,sp,-16
+    800005b4:	e406                	sd	ra,8(sp)
     put_string("Random RW, #iterations = ");
-    800005b2:	00001517          	auipc	a0,0x1
-    800005b6:	90650513          	addi	a0,a0,-1786 # 80000eb8 <.got.plt+0xc8>
-    800005ba:	ab3ff0ef          	jal	ra,8000006c <put_string>
+    800005b6:	00003517          	auipc	a0,0x3
+    800005ba:	33250513          	addi	a0,a0,818 # 800038e8 <.got.plt+0xc8>
+    800005be:	aafff0ef          	jal	ra,8000006c <put_string>
     put_uint32(NUM_ITERATIONS);
-    800005be:	4529                	li	a0,10
-    800005c0:	b45ff0ef          	jal	ra,80000104 <put_uint32>
+    800005c2:	4529                	li	a0,10
+    800005c4:	b41ff0ef          	jal	ra,80000104 <put_uint32>
     put_string(" vectors size = ");
-    800005c4:	00001517          	auipc	a0,0x1
-    800005c8:	91450513          	addi	a0,a0,-1772 # 80000ed8 <.got.plt+0xe8>
-    800005cc:	aa1ff0ef          	jal	ra,8000006c <put_string>
+    800005c8:	00003517          	auipc	a0,0x3
+    800005cc:	34050513          	addi	a0,a0,832 # 80003908 <.got.plt+0xe8>
+    800005d0:	a9dff0ef          	jal	ra,8000006c <put_string>
     put_uint32(MAX_PRIV);
-    800005d0:	06400513          	li	a0,100
-    800005d4:	b31ff0ef          	jal	ra,80000104 <put_uint32>
+    800005d4:	3e800513          	li	a0,1000
+    800005d8:	b2dff0ef          	jal	ra,80000104 <put_uint32>
 }
-    800005d8:	60a2                	ld	ra,8(sp)
-    800005da:	0141                	addi	sp,sp,16
-    800005dc:	8082                	ret
+    800005dc:	60a2                	ld	ra,8(sp)
+    800005de:	0141                	addi	sp,sp,16
+    800005e0:	8082                	ret
 
-00000000800005de <rand_rw_op>:
+00000000800005e2 <rand_rw_op>:
 
 
 void rand_rw_op(int pid)
 {
-    800005de:	711d                	addi	sp,sp,-96
-    800005e0:	ec86                	sd	ra,88(sp)
-    800005e2:	e8a2                	sd	s0,80(sp)
-    800005e4:	e4a6                	sd	s1,72(sp)
-    800005e6:	e0ca                	sd	s2,64(sp)
-    800005e8:	fc4e                	sd	s3,56(sp)
-    800005ea:	f852                	sd	s4,48(sp)
-    800005ec:	f456                	sd	s5,40(sp)
-    800005ee:	f05a                	sd	s6,32(sp)
-    800005f0:	ec5e                	sd	s7,24(sp)
-    800005f2:	e862                	sd	s8,16(sp)
-    800005f4:	89aa                	mv	s3,a0
+    800005e2:	711d                	addi	sp,sp,-96
+    800005e4:	ec86                	sd	ra,88(sp)
+    800005e6:	e8a2                	sd	s0,80(sp)
+    800005e8:	e4a6                	sd	s1,72(sp)
+    800005ea:	e0ca                	sd	s2,64(sp)
+    800005ec:	fc4e                	sd	s3,56(sp)
+    800005ee:	f852                	sd	s4,48(sp)
+    800005f0:	f456                	sd	s5,40(sp)
+    800005f2:	f05a                	sd	s6,32(sp)
+    800005f4:	ec5e                	sd	s7,24(sp)
+    800005f6:	e862                	sd	s8,16(sp)
+    800005f8:	89aa                	mv	s3,a0
 	uint32_t seed = 1212 + pid;
-    800005f6:	4bc5079b          	addiw	a5,a0,1212
-    800005fa:	c63e                	sw	a5,12(sp)
-    800005fc:	4ba9                	li	s7,10
+    800005fa:	4bc5079b          	addiw	a5,a0,1212
+    800005fe:	c63e                	sw	a5,12(sp)
+    80000600:	4ba9                	li	s7,10
 	volatile uint32_t read_tmp;
 
 	for (int i = 0; i < NUM_ITERATIONS; ++i)
 	{	
 		//private random read
 		rand_tmp = rand_k(&(seed),MAX_PRIV);
-    800005fe:	0060                	addi	s0,sp,12
+    80000602:	0060                	addi	s0,sp,12
 		for (int i = 0; i < rand_tmp; ++i)
-    80000600:	4b01                	li	s6,0
+    80000604:	4b01                	li	s6,0
 		{
 			read_tmp = rand_rw.priv_vect[rand_k(&(seed),MAX_PRIV/2)*2][pid];
-    80000602:	00000497          	auipc	s1,0x0
-    80000606:	1be48493          	addi	s1,s1,446 # 800007c0 <rand_rw>
+    80000606:	00000497          	auipc	s1,0x0
+    8000060a:	1ba48493          	addi	s1,s1,442 # 800007c0 <rand_rw>
 		for (int i = 0; i < rand_tmp; ++i)
 		{
 			read_tmp = rand_rw.share_vect[rand_k(&(seed),MAX_SHARE/4)*4];
 		}*/
 
 		acquire(&rand_rw.lock);
-    8000060a:	00000c17          	auipc	s8,0x0
-    8000060e:	666c0c13          	addi	s8,s8,1638 # 80000c70 <rand_rw+0x4b0>
-    80000612:	a039                	j	80000620 <rand_rw_op+0x42>
+    8000060e:	00003c17          	auipc	s8,0x3
+    80000612:	092c0c13          	addi	s8,s8,146 # 800036a0 <rand_rw+0x2ee0>
+    80000616:	a039                	j	80000624 <rand_rw_op+0x42>
 		rand_tmp = rand_k(&(seed),MAX_SHARE);
 		for (int i = 0; i < rand_tmp; ++i)
 		{
 			rand_rw.share_vect[rand_k(&(seed),MAX_SHARE/4)*4] = i;
 		}
 		release(&rand_rw.lock);
-    80000614:	8562                	mv	a0,s8
-    80000616:	da5ff0ef          	jal	ra,800003ba <release>
+    80000618:	8562                	mv	a0,s8
+    8000061a:	da5ff0ef          	jal	ra,800003be <release>
 	for (int i = 0; i < NUM_ITERATIONS; ++i)
-    8000061a:	3bfd                	addiw	s7,s7,-1
-    8000061c:	160b8663          	beqz	s7,80000788 <rand_rw_op+0x1aa>
+    8000061e:	3bfd                	addiw	s7,s7,-1
+    80000620:	160b8663          	beqz	s7,8000078c <rand_rw_op+0x1aa>
 		rand_tmp = rand_k(&(seed),MAX_PRIV);
-    80000620:	06400593          	li	a1,100
-    80000624:	8522                	mv	a0,s0
-    80000626:	c9bff0ef          	jal	ra,800002c0 <rand_k>
-    8000062a:	2501                	sext.w	a0,a0
+    80000624:	3e800593          	li	a1,1000
+    80000628:	8522                	mv	a0,s0
+    8000062a:	c93ff0ef          	jal	ra,800002bc <rand_k>
+    8000062e:	2501                	sext.w	a0,a0
 		for (int i = 0; i < rand_tmp; ++i)
-    8000062c:	c51d                	beqz	a0,8000065a <rand_rw_op+0x7c>
-    8000062e:	00050a1b          	sext.w	s4,a0
-    80000632:	895a                	mv	s2,s6
+    80000630:	c51d                	beqz	a0,8000065e <rand_rw_op+0x7c>
+    80000632:	00050a1b          	sext.w	s4,a0
+    80000636:	895a                	mv	s2,s6
 			read_tmp = rand_rw.priv_vect[rand_k(&(seed),MAX_PRIV/2)*2][pid];
-    80000634:	03200593          	li	a1,50
-    80000638:	8522                	mv	a0,s0
-    8000063a:	c87ff0ef          	jal	ra,800002c0 <rand_k>
-    8000063e:	0015179b          	slliw	a5,a0,0x1
-    80000642:	1782                	slli	a5,a5,0x20
-    80000644:	9381                	srli	a5,a5,0x20
-    80000646:	0786                	slli	a5,a5,0x1
-    80000648:	97ce                	add	a5,a5,s3
-    8000064a:	078a                	slli	a5,a5,0x2
-    8000064c:	97a6                	add	a5,a5,s1
-    8000064e:	439c                	lw	a5,0(a5)
-    80000650:	2781                	sext.w	a5,a5
-    80000652:	c43e                	sw	a5,8(sp)
+    80000638:	1f400593          	li	a1,500
+    8000063c:	8522                	mv	a0,s0
+    8000063e:	c7fff0ef          	jal	ra,800002bc <rand_k>
+    80000642:	0015179b          	slliw	a5,a0,0x1
+    80000646:	1782                	slli	a5,a5,0x20
+    80000648:	9381                	srli	a5,a5,0x20
+    8000064a:	0786                	slli	a5,a5,0x1
+    8000064c:	97ce                	add	a5,a5,s3
+    8000064e:	078a                	slli	a5,a5,0x2
+    80000650:	97a6                	add	a5,a5,s1
+    80000652:	439c                	lw	a5,0(a5)
+    80000654:	2781                	sext.w	a5,a5
+    80000656:	c43e                	sw	a5,8(sp)
 		for (int i = 0; i < rand_tmp; ++i)
-    80000654:	2905                	addiw	s2,s2,1
-    80000656:	fd2a1fe3          	bne	s4,s2,80000634 <rand_rw_op+0x56>
+    80000658:	2905                	addiw	s2,s2,1
+    8000065a:	fd2a1fe3          	bne	s4,s2,80000638 <rand_rw_op+0x56>
 		rand_tmp = rand_k(&(seed),MAX_PRIV);
-    8000065a:	06400593          	li	a1,100
-    8000065e:	8522                	mv	a0,s0
-    80000660:	c61ff0ef          	jal	ra,800002c0 <rand_k>
-    80000664:	2501                	sext.w	a0,a0
+    8000065e:	3e800593          	li	a1,1000
+    80000662:	8522                	mv	a0,s0
+    80000664:	c59ff0ef          	jal	ra,800002bc <rand_k>
+    80000668:	2501                	sext.w	a0,a0
 		for (int i = 0; i < rand_tmp; ++i)
-    80000666:	c905                	beqz	a0,80000696 <rand_rw_op+0xb8>
-    80000668:	00050a9b          	sext.w	s5,a0
-    8000066c:	895a                	mv	s2,s6
-    8000066e:	00090a1b          	sext.w	s4,s2
+    8000066a:	c905                	beqz	a0,8000069a <rand_rw_op+0xb8>
+    8000066c:	00050a9b          	sext.w	s5,a0
+    80000670:	895a                	mv	s2,s6
+    80000672:	00090a1b          	sext.w	s4,s2
 			rand_rw.priv_vect[rand_k(&(seed),MAX_PRIV/2)*2][pid] = i;
-    80000672:	03200593          	li	a1,50
-    80000676:	8522                	mv	a0,s0
-    80000678:	c49ff0ef          	jal	ra,800002c0 <rand_k>
-    8000067c:	0015179b          	slliw	a5,a0,0x1
-    80000680:	1782                	slli	a5,a5,0x20
-    80000682:	9381                	srli	a5,a5,0x20
-    80000684:	0786                	slli	a5,a5,0x1
-    80000686:	97ce                	add	a5,a5,s3
-    80000688:	078a                	slli	a5,a5,0x2
-    8000068a:	97a6                	add	a5,a5,s1
-    8000068c:	0147a023          	sw	s4,0(a5)
+    80000676:	1f400593          	li	a1,500
+    8000067a:	8522                	mv	a0,s0
+    8000067c:	c41ff0ef          	jal	ra,800002bc <rand_k>
+    80000680:	0015179b          	slliw	a5,a0,0x1
+    80000684:	1782                	slli	a5,a5,0x20
+    80000686:	9381                	srli	a5,a5,0x20
+    80000688:	0786                	slli	a5,a5,0x1
+    8000068a:	97ce                	add	a5,a5,s3
+    8000068c:	078a                	slli	a5,a5,0x2
+    8000068e:	97a6                	add	a5,a5,s1
+    80000690:	0147a023          	sw	s4,0(a5)
 		for (int i = 0; i < rand_tmp; ++i)
-    80000690:	2905                	addiw	s2,s2,1
-    80000692:	fd2a9ee3          	bne	s5,s2,8000066e <rand_rw_op+0x90>
+    80000694:	2905                	addiw	s2,s2,1
+    80000696:	fd2a9ee3          	bne	s5,s2,80000672 <rand_rw_op+0x90>
 		acquire(&rand_rw.lock);
-    80000696:	8562                	mv	a0,s8
-    80000698:	d17ff0ef          	jal	ra,800003ae <acquire>
-		rand_tmp = rand_k(&(seed),MAX_PRIV);
-    8000069c:	06400593          	li	a1,100
-    800006a0:	8522                	mv	a0,s0
-    800006a2:	c1fff0ef          	jal	ra,800002c0 <rand_k>
-    800006a6:	2501                	sext.w	a0,a0
+    8000069a:	8562                	mv	a0,s8
+    8000069c:	d17ff0ef          	jal	ra,800003b2 <acquire>
+		rand_tmp = rand_k(&(seed),MAX_PRIV/10);
+    800006a0:	06400593          	li	a1,100
+    800006a4:	8522                	mv	a0,s0
+    800006a6:	c17ff0ef          	jal	ra,800002bc <rand_k>
+    800006aa:	2501                	sext.w	a0,a0
 		for (int i = 0; i < rand_tmp; ++i)
-    800006a8:	c51d                	beqz	a0,800006d6 <rand_rw_op+0xf8>
-    800006aa:	00050a1b          	sext.w	s4,a0
-    800006ae:	895a                	mv	s2,s6
+    800006ac:	c51d                	beqz	a0,800006da <rand_rw_op+0xf8>
+    800006ae:	00050a1b          	sext.w	s4,a0
+    800006b2:	895a                	mv	s2,s6
 			read_tmp = rand_rw.priv_vect[rand_k(&(seed),MAX_PRIV/2)*2][pid];
-    800006b0:	03200593          	li	a1,50
-    800006b4:	8522                	mv	a0,s0
-    800006b6:	c0bff0ef          	jal	ra,800002c0 <rand_k>
-    800006ba:	0015179b          	slliw	a5,a0,0x1
-    800006be:	1782                	slli	a5,a5,0x20
-    800006c0:	9381                	srli	a5,a5,0x20
-    800006c2:	0786                	slli	a5,a5,0x1
-    800006c4:	97ce                	add	a5,a5,s3
-    800006c6:	078a                	slli	a5,a5,0x2
-    800006c8:	97a6                	add	a5,a5,s1
-    800006ca:	439c                	lw	a5,0(a5)
-    800006cc:	2781                	sext.w	a5,a5
-    800006ce:	c43e                	sw	a5,8(sp)
+    800006b4:	1f400593          	li	a1,500
+    800006b8:	8522                	mv	a0,s0
+    800006ba:	c03ff0ef          	jal	ra,800002bc <rand_k>
+    800006be:	0015179b          	slliw	a5,a0,0x1
+    800006c2:	1782                	slli	a5,a5,0x20
+    800006c4:	9381                	srli	a5,a5,0x20
+    800006c6:	0786                	slli	a5,a5,0x1
+    800006c8:	97ce                	add	a5,a5,s3
+    800006ca:	078a                	slli	a5,a5,0x2
+    800006cc:	97a6                	add	a5,a5,s1
+    800006ce:	439c                	lw	a5,0(a5)
+    800006d0:	2781                	sext.w	a5,a5
+    800006d2:	c43e                	sw	a5,8(sp)
 		for (int i = 0; i < rand_tmp; ++i)
-    800006d0:	2905                	addiw	s2,s2,1
-    800006d2:	fd2a1fe3          	bne	s4,s2,800006b0 <rand_rw_op+0xd2>
-		rand_tmp = rand_k(&(seed),MAX_PRIV);
-    800006d6:	06400593          	li	a1,100
-    800006da:	8522                	mv	a0,s0
-    800006dc:	be5ff0ef          	jal	ra,800002c0 <rand_k>
-    800006e0:	2501                	sext.w	a0,a0
+    800006d4:	2905                	addiw	s2,s2,1
+    800006d6:	fd2a1fe3          	bne	s4,s2,800006b4 <rand_rw_op+0xd2>
+		rand_tmp = rand_k(&(seed),MAX_PRIV/10);
+    800006da:	06400593          	li	a1,100
+    800006de:	8522                	mv	a0,s0
+    800006e0:	bddff0ef          	jal	ra,800002bc <rand_k>
+    800006e4:	2501                	sext.w	a0,a0
 		for (int i = 0; i < rand_tmp; ++i)
-    800006e2:	c905                	beqz	a0,80000712 <rand_rw_op+0x134>
-    800006e4:	00050a9b          	sext.w	s5,a0
-    800006e8:	895a                	mv	s2,s6
-    800006ea:	00090a1b          	sext.w	s4,s2
+    800006e6:	c905                	beqz	a0,80000716 <rand_rw_op+0x134>
+    800006e8:	00050a9b          	sext.w	s5,a0
+    800006ec:	895a                	mv	s2,s6
+    800006ee:	00090a1b          	sext.w	s4,s2
 			rand_rw.priv_vect[rand_k(&(seed),MAX_PRIV/2)*2][pid] = i;
-    800006ee:	03200593          	li	a1,50
-    800006f2:	8522                	mv	a0,s0
-    800006f4:	bcdff0ef          	jal	ra,800002c0 <rand_k>
-    800006f8:	0015179b          	slliw	a5,a0,0x1
-    800006fc:	1782                	slli	a5,a5,0x20
-    800006fe:	9381                	srli	a5,a5,0x20
-    80000700:	0786                	slli	a5,a5,0x1
-    80000702:	97ce                	add	a5,a5,s3
-    80000704:	078a                	slli	a5,a5,0x2
-    80000706:	97a6                	add	a5,a5,s1
-    80000708:	0147a023          	sw	s4,0(a5)
+    800006f2:	1f400593          	li	a1,500
+    800006f6:	8522                	mv	a0,s0
+    800006f8:	bc5ff0ef          	jal	ra,800002bc <rand_k>
+    800006fc:	0015179b          	slliw	a5,a0,0x1
+    80000700:	1782                	slli	a5,a5,0x20
+    80000702:	9381                	srli	a5,a5,0x20
+    80000704:	0786                	slli	a5,a5,0x1
+    80000706:	97ce                	add	a5,a5,s3
+    80000708:	078a                	slli	a5,a5,0x2
+    8000070a:	97a6                	add	a5,a5,s1
+    8000070c:	0147a023          	sw	s4,0(a5)
 		for (int i = 0; i < rand_tmp; ++i)
-    8000070c:	2905                	addiw	s2,s2,1
-    8000070e:	fd591ee3          	bne	s2,s5,800006ea <rand_rw_op+0x10c>
+    80000710:	2905                	addiw	s2,s2,1
+    80000712:	fd591ee3          	bne	s2,s5,800006ee <rand_rw_op+0x10c>
 		rand_tmp = rand_k(&(seed),MAX_SHARE);
-    80000712:	06400593          	li	a1,100
-    80000716:	8522                	mv	a0,s0
-    80000718:	ba9ff0ef          	jal	ra,800002c0 <rand_k>
-    8000071c:	2501                	sext.w	a0,a0
+    80000716:	06400593          	li	a1,100
+    8000071a:	8522                	mv	a0,s0
+    8000071c:	ba1ff0ef          	jal	ra,800002bc <rand_k>
+    80000720:	2501                	sext.w	a0,a0
 		for (int i = 0; i < rand_tmp; ++i)
-    8000071e:	c515                	beqz	a0,8000074a <rand_rw_op+0x16c>
-    80000720:	00050a1b          	sext.w	s4,a0
-    80000724:	895a                	mv	s2,s6
+    80000722:	c515                	beqz	a0,8000074e <rand_rw_op+0x16c>
+    80000724:	00050a1b          	sext.w	s4,a0
+    80000728:	895a                	mv	s2,s6
 			read_tmp = rand_rw.share_vect[rand_k(&(seed),MAX_SHARE/4)*4];
-    80000726:	45e5                	li	a1,25
-    80000728:	8522                	mv	a0,s0
-    8000072a:	b97ff0ef          	jal	ra,800002c0 <rand_k>
-    8000072e:	0025179b          	slliw	a5,a0,0x2
-    80000732:	1782                	slli	a5,a5,0x20
-    80000734:	9381                	srli	a5,a5,0x20
-    80000736:	0c878793          	addi	a5,a5,200
-    8000073a:	078a                	slli	a5,a5,0x2
-    8000073c:	97a6                	add	a5,a5,s1
-    8000073e:	439c                	lw	a5,0(a5)
-    80000740:	2781                	sext.w	a5,a5
-    80000742:	c43e                	sw	a5,8(sp)
+    8000072a:	45e5                	li	a1,25
+    8000072c:	8522                	mv	a0,s0
+    8000072e:	b8fff0ef          	jal	ra,800002bc <rand_k>
+    80000732:	0025179b          	slliw	a5,a0,0x2
+    80000736:	1782                	slli	a5,a5,0x20
+    80000738:	9381                	srli	a5,a5,0x20
+    8000073a:	7d078793          	addi	a5,a5,2000
+    8000073e:	078a                	slli	a5,a5,0x2
+    80000740:	97a6                	add	a5,a5,s1
+    80000742:	439c                	lw	a5,0(a5)
+    80000744:	2781                	sext.w	a5,a5
+    80000746:	c43e                	sw	a5,8(sp)
 		for (int i = 0; i < rand_tmp; ++i)
-    80000744:	2905                	addiw	s2,s2,1
-    80000746:	ff4910e3          	bne	s2,s4,80000726 <rand_rw_op+0x148>
+    80000748:	2905                	addiw	s2,s2,1
+    8000074a:	ff4910e3          	bne	s2,s4,8000072a <rand_rw_op+0x148>
 		rand_tmp = rand_k(&(seed),MAX_SHARE);
-    8000074a:	06400593          	li	a1,100
-    8000074e:	8522                	mv	a0,s0
-    80000750:	b71ff0ef          	jal	ra,800002c0 <rand_k>
-    80000754:	2501                	sext.w	a0,a0
+    8000074e:	06400593          	li	a1,100
+    80000752:	8522                	mv	a0,s0
+    80000754:	b69ff0ef          	jal	ra,800002bc <rand_k>
+    80000758:	2501                	sext.w	a0,a0
 		for (int i = 0; i < rand_tmp; ++i)
-    80000756:	ea050fe3          	beqz	a0,80000614 <rand_rw_op+0x36>
-    8000075a:	00050a9b          	sext.w	s5,a0
-    8000075e:	895a                	mv	s2,s6
-    80000760:	00090a1b          	sext.w	s4,s2
+    8000075a:	ea050fe3          	beqz	a0,80000618 <rand_rw_op+0x36>
+    8000075e:	00050a9b          	sext.w	s5,a0
+    80000762:	895a                	mv	s2,s6
+    80000764:	00090a1b          	sext.w	s4,s2
 			rand_rw.share_vect[rand_k(&(seed),MAX_SHARE/4)*4] = i;
-    80000764:	45e5                	li	a1,25
-    80000766:	8522                	mv	a0,s0
-    80000768:	b59ff0ef          	jal	ra,800002c0 <rand_k>
-    8000076c:	0025179b          	slliw	a5,a0,0x2
-    80000770:	1782                	slli	a5,a5,0x20
-    80000772:	9381                	srli	a5,a5,0x20
-    80000774:	0c878793          	addi	a5,a5,200
-    80000778:	078a                	slli	a5,a5,0x2
-    8000077a:	97a6                	add	a5,a5,s1
-    8000077c:	0147a023          	sw	s4,0(a5)
+    80000768:	45e5                	li	a1,25
+    8000076a:	8522                	mv	a0,s0
+    8000076c:	b51ff0ef          	jal	ra,800002bc <rand_k>
+    80000770:	0025179b          	slliw	a5,a0,0x2
+    80000774:	1782                	slli	a5,a5,0x20
+    80000776:	9381                	srli	a5,a5,0x20
+    80000778:	7d078793          	addi	a5,a5,2000
+    8000077c:	078a                	slli	a5,a5,0x2
+    8000077e:	97a6                	add	a5,a5,s1
+    80000780:	0147a023          	sw	s4,0(a5)
 		for (int i = 0; i < rand_tmp; ++i)
-    80000780:	2905                	addiw	s2,s2,1
-    80000782:	fd591fe3          	bne	s2,s5,80000760 <rand_rw_op+0x182>
-    80000786:	b579                	j	80000614 <rand_rw_op+0x36>
+    80000784:	2905                	addiw	s2,s2,1
+    80000786:	fd591fe3          	bne	s2,s5,80000764 <rand_rw_op+0x182>
+    8000078a:	b579                	j	80000618 <rand_rw_op+0x36>
 	}
 
 	//dummy read to avoid warning
 	read_tmp++;
-    80000788:	47a2                	lw	a5,8(sp)
-    8000078a:	2785                	addiw	a5,a5,1
-    8000078c:	c43e                	sw	a5,8(sp)
+    8000078c:	47a2                	lw	a5,8(sp)
+    8000078e:	2785                	addiw	a5,a5,1
+    80000790:	c43e                	sw	a5,8(sp)
 }
-    8000078e:	60e6                	ld	ra,88(sp)
-    80000790:	6446                	ld	s0,80(sp)
-    80000792:	64a6                	ld	s1,72(sp)
-    80000794:	6906                	ld	s2,64(sp)
-    80000796:	79e2                	ld	s3,56(sp)
-    80000798:	7a42                	ld	s4,48(sp)
-    8000079a:	7aa2                	ld	s5,40(sp)
-    8000079c:	7b02                	ld	s6,32(sp)
-    8000079e:	6be2                	ld	s7,24(sp)
-    800007a0:	6c42                	ld	s8,16(sp)
-    800007a2:	6125                	addi	sp,sp,96
-    800007a4:	8082                	ret
+    80000792:	60e6                	ld	ra,88(sp)
+    80000794:	6446                	ld	s0,80(sp)
+    80000796:	64a6                	ld	s1,72(sp)
+    80000798:	6906                	ld	s2,64(sp)
+    8000079a:	79e2                	ld	s3,56(sp)
+    8000079c:	7a42                	ld	s4,48(sp)
+    8000079e:	7aa2                	ld	s5,40(sp)
+    800007a0:	7b02                	ld	s6,32(sp)
+    800007a2:	6be2                	ld	s7,24(sp)
+    800007a4:	6c42                	ld	s8,16(sp)
+    800007a6:	6125                	addi	sp,sp,96
+    800007a8:	8082                	ret
 
-00000000800007a6 <rand_rw_check>:
+00000000800007aa <rand_rw_check>:
 
 int rand_rw_check()
 {
 	return 0;
-    800007a6:	4501                	li	a0,0
-    800007a8:	8082                	ret
+    800007aa:	4501                	li	a0,0
+    800007ac:	8082                	ret

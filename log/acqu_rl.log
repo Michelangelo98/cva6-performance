@@ -1,0 +1,27 @@
+N dirty = 0
+Acquire time 571.111111111
+Release time 572.9
+
+N dirty = 1
+Acquire time 611.777777778
+Release time 614.4
+
+N dirty = 10
+Acquire time 982.333333333
+Release time 974.5
+
+N dirty = 50
+Acquire time 2490.77777778
+Release time 2609.2
+
+N dirty = 100
+Acquire time 4486.44444444
+Release time 4545.1
+
+N dirty = 1000
+Acquire time 41537.1111111
+Release time 41272.9
+
+N dirty = 10000
+Acquire time 84004.1111111
+Release time 84219.6

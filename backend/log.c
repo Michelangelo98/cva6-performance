@@ -93,7 +93,7 @@ void log_display()
 {
   //put_string("log_display started\r\n");
   if(test_check_coherence() == 0){
-    log_print_performance();
+    //log_print_performance();
   }else{
     put_string("ERROR: coherence not ensured\r\n");
   }

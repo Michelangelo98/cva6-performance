@@ -49,13 +49,13 @@ void rand_rw_op(int pid)
 
 		acquire(&rand_rw.lock);
 		//private random read
-		rand_tmp = rand_k(&(seed),MAX_PRIV);
+		rand_tmp = rand_k(&(seed),MAX_PRIV/10);
 		for (int i = 0; i < rand_tmp; ++i)
 		{
 			read_tmp = rand_rw.priv_vect[rand_k(&(seed),MAX_PRIV/2)*2][pid];
 		}
 		//private random write
-		rand_tmp = rand_k(&(seed),MAX_PRIV);
+		rand_tmp = rand_k(&(seed),MAX_PRIV/10);
 		for (int i = 0; i < rand_tmp; ++i)
 		{
 			rand_rw.priv_vect[rand_k(&(seed),MAX_PRIV/2)*2][pid] = i;

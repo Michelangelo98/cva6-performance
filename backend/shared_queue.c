@@ -25,47 +25,35 @@ void initQueue() {
 }
 
 // Add an element to the queue
-void enqueue(int32_t data) {
-
-    static int node_index = 0;
-
-    //struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
-    nodes[node_index].data = data;
-    nodes[node_index].next = NULL;
-
-    acquire(&q.lock);
-    if (q.tail == NULL) {
-        // The queue is empty
-        q.head = &nodes[node_index];
-        q.tail = &nodes[node_index];
-    } else {
-        // Add the new node to the end of the list
-        q.tail->next = &nodes[node_index];
-        q.tail = &nodes[node_index];
+int32_t enqueue(int32_t *data) {
+    uint32_t current_tail = q.tail;
+    if (current_tail == MAX_NODES) {
+      return 1;
     }
-    node_index += 4;
-    release(&q.lock);
+    // Write data
+    q.array[current_tail] = *data;
+    arch_generic_barrier();
+    // Safely update tail
+    q.tail = current_tail+1;
+    arch_generic_barrier();
+    return 0;
+
 }
 
 // Remove an element from the queue
-int32_t dequeue() {
-    acquire(&q.lock);
-    if (q.head == NULL) {
-        // The queue is empty
-        release(&q.lock);
-        return -1;
-    } else {
-        struct Node *temp = q.head;
-        int32_t data = temp->data;
-        q.head = temp->next;
-
-        if (q.head == NULL) {
-            // The queue is now empty
-            q.tail = NULL;
-        }
-        release(&q.lock);
-        return data;
+int32_t dequeue(int32_t *data) {
+    arch_generic_barrier();
+    uint32_t current_head = q.head;
+    // Check if empty
+    if (current_head == q.tail) {
+      return 1;
     }
+    // Read data
+    *data = q.array[current_head];
+    
+    // Update head
+    q.head = (current_head + 1);
+    return 0;
 }
 
 void shared_queue_init(){
@@ -80,16 +68,16 @@ void shared_queue_print(){
 int shared_queue_check(){
     
     int32_t expected_value = 0;
-
     for (int i = 0; i < MAX_NODES; ++i)
     {
-        if (outcomes[i] == expected_value) 
+        //put_int64((int64_t)outcomes[i]);
+        //put_string(" ");
+        if (outcomes[i] != expected_value) 
         {
-            expected_value++;
-        }else if (outcomes[i] != -1)
-        {
+            //put_string("ERROR ");
             return -1;
         }
+        expected_value++;
     }
 
     return 0;
@@ -97,16 +85,20 @@ int shared_queue_check(){
 
 void shared_queue_op(int pid){
 
-    uint32_t seed = 1212 + pid;
+    //uint32_t seed = 1212 + pid;
     for (int i = 0; i < MAX_NODES; ++i)
     {
-        delay(rand_k(&(seed),500));
+        //delay(rand_k(&(seed),500));
         if (pid == 0)
         {   
-            outcomes[i] = dequeue();
+            int32_t ret;
+            do{
+                ret = dequeue(&outcomes[i]);
+            }while(ret == 1);
+            
         }else if (pid == 1)
         {
-            enqueue(i);
+            enqueue(&i);      
         }
     }
 }

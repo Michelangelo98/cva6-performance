@@ -139,6 +139,14 @@ void arch_barrier_down()
   barrier_wait(&barrier2, -1, 0);
 }
 
+void arch_generic_barrier()
+{
+  asm volatile (
+
+      "nop                    \n"
+      "fence                   \n"
+      );
+}
 
 void acquire(volatile uint32_t * lock)
 {

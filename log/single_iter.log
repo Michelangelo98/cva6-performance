@@ -1,0 +1,46 @@
+HART 0 : -----------------------------
+# spin = 3
+Acquire time = 2072
+Avg acquire time = 690
+Release time = 617
+CS time = 670
+Tot time = 4454
+HART 1 : -----------------------------
+# spin = 1
+Acquire time = 770
+Avg acquire time = 770
+Release time = 618
+CS time = 758
+Tot time = 3153
+
+
+HART 0 : -----------------------------
+# spin = 6
+Acquire time = 4071
+Avg acquire time = 678
+Release time = 727
+CS time = 1983
+Tot time = 8998
+HART 1 : -----------------------------
+# spin = 1
+Acquire time = 995
+Avg acquire time = 995
+Release time = 891
+CS time = 2627
+Tot time = 6213
+
+
+HART 0 : -----------------------------
+# spin = 1
+Acquire time = 2027
+Avg acquire time = 2027
+Release time = 3147
+CS time = 19523
+Tot time = 31361
+HART 1 : -----------------------------
+# spin = 33
+Acquire time = 22601
+Avg acquire time = 684
+Release time = 3230
+CS time = 18504
+Tot time = 53701

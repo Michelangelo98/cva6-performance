@@ -1,0 +1,23 @@
+Dear ...,
+
+I am writing to recommend Michelangelo Miceli for any job opportunities in the field of digital
+design. Michelangelo is currently completing his Master's degree in Electronic Engineering at 
+Politecnico Di Torino, and I have had the pleasure of working with him as his professor supervisor 
+during his Master's Thesis at ETH Zurich.
+
+I am impressed with his skills and qualifications in digital design. During his time at 
+ETH Zurich, Michelangelo demonstrated his ability to develop a digital design project from 
+algorithm research to hardware description, verification, and benchmarking. Specifically, 
+Michelangelo has been working on implementing a cache coherence algorithm for CVA6, a RISC-V 
+based processor developed at ETH, and has been providing me with weekly progress reports. His 
+dedication, passion, and hard work are evident in his work.
+
+Michelangelo is a highly motivated individual who consistently demonstrates a strong work ethic 
+and respect for deadlines. His passion for digital design and computer architecture is evident in
+his work, and I have no doubt that he will excel in any digital design project he undertakes.
+
+Overall, I highly recommend Michelangelo for any digital design job opportunities. His skills, 
+qualifications, and passion for digital design make him a proper candidate for any position.
+
+Sincerely,
+...
